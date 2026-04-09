@@ -7,6 +7,8 @@ export function ObservationDeck() {
   const [activeChannel, setActiveChannel] = useState(1);
   const [glitching, setGlitching] = useState(false);
 
+  const toPublicAsset = (relativePath: string) => `${import.meta.env.BASE_URL}${relativePath}`;
+
   const channelFeeds: Record<number, { videoId: string; label: string }> = {
     1: { videoId: 'XL-mLllkLIU', label: 'Band Broadcast' },
     2: { videoId: 'RJBoyK2_iaE', label: 'Rocket Launch Feed A' },
@@ -17,13 +19,13 @@ export function ObservationDeck() {
     {
       id: 'sound-2',
       title: 'Sound 2 // Initial Mars Sweep',
-      file: '/audio/sound-2.wav',
+      file: toPublicAsset('audio/sound-2.wav'),
       note: 'Recovered raw sweep with narrow-band noise and short transients.',
     },
     {
       id: 'sound-16',
       title: 'Sound 16 // Deep Signal Capture',
-      file: '/audio/sound-16.wav',
+      file: toPublicAsset('audio/sound-16.wav'),
       note: 'Long-form transmission sample with low-frequency resonance drift.',
     },
   ];

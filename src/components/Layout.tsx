@@ -4,7 +4,9 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Instagram, Youtube, Music, Headphones } from 'lucide-react';
 
-const logoSources = ['/logo.png', '/logo.webp', '/logo.svg', '/logo.jpg', '/logo.jpeg'];
+const logoSources = ['logo.png', 'logo.webp', 'logo.svg', 'logo.jpg', 'logo.jpeg'];
+
+const toPublicAsset = (relativePath: string) => `${import.meta.env.BASE_URL}${relativePath}`;
 
 const socialLinks = [
   {
@@ -85,7 +87,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   </div>
                 ) : (
                   <img
-                    src={logoSources[logoIndex]}
+                    src={toPublicAsset(logoSources[logoIndex])}
                     alt="Jason Achilles Logo"
                     className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(199,183,157,0.9)]"
                     onError={handleLogoError}

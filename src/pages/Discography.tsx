@@ -101,6 +101,8 @@ const getPhotoTileClass = (index: number) => {
   return '';
 };
 
+const toPublicAsset = (relativePath: string) => `${import.meta.env.BASE_URL}${relativePath}`;
+
 export function Discography() {
   const [loading, setLoading] = useState(false);
   const [activeTape, setActiveTape] = useState<string | null>(archiveData[0].id);
@@ -380,7 +382,7 @@ export function Discography() {
               <div className="font-share text-lg text-[#eadbff] uppercase tracking-wider">Jason Photo Archive</div>
               <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 auto-rows-[110px] md:auto-rows-[88px]">
                 {photoFiles.map((photo, index) => {
-                  const photoUrl = `/jason-photos/${photo}`;
+                  const photoUrl = toPublicAsset(`jason-photos/${photo}`);
                   return (
                     <a
                       key={photo}

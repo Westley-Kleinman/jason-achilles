@@ -111,7 +111,7 @@ export function ObservationDeck() {
                   opacity: [1, 0.5, 1, 0.2, 1]
                 }}
                 transition={{ duration: 0.2, repeat: Infinity }}
-                className="text-red-500 font-share text-4xl tracking-widest"
+                className="text-red-500 font-share text-2xl md:text-4xl tracking-widest text-center px-3"
               >
                 SIGNAL LOST
               </motion.div>

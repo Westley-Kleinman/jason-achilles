@@ -192,11 +192,11 @@ export function LogisticsHub({
 
   return (
     <div className="flex flex-col h-full gap-4">
-      <div className="flex justify-between items-center border-b border-amber-dim pb-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b border-amber-dim pb-2">
         <h2 className="font-share text-2xl uppercase tracking-widest bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8] bg-clip-text text-transparent">
           Logistics Hub
         </h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto justify-start sm:justify-end">
           <button
             onClick={() => setActiveTab('TRAJECTORY')}
             className={`px-3 py-1 font-vt323 text-sm border ${activeTab === 'TRAJECTORY' ? 'border-[#ff7a1a] bg-[#ff7a1a]/20 text-[#ffd4ad]' : 'border-amber-dim text-amber-dim hover:border-[#ff7a1a] hover:text-[#ffb067]'}`}
@@ -212,7 +212,7 @@ export function LogisticsHub({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-black border-2 border-amber-dim p-4 rounded box-glow relative">
+      <div className="flex-1 overflow-visible md:overflow-y-auto custom-scrollbar bg-black border-2 border-amber-dim p-4 rounded box-glow relative">
         {activeTab === 'TRAJECTORY' ? (
           <div className="flex flex-col gap-6">
             <div className="font-share text-[#ffc08e] border-b border-[#ff7a1a]/35 pb-2">
@@ -267,7 +267,7 @@ export function LogisticsHub({
                   </div>
                 </div>
 
-                <div className="mt-3 flex flex-col gap-3 overflow-x-auto custom-scrollbar pb-2">
+                <div className="mt-3 hidden md:flex flex-col gap-3 overflow-x-auto custom-scrollbar pb-2">
                   <div className="flex gap-4 min-w-[1040px] font-vt323 text-amber-dim text-sm px-2">
                     <div className="w-[118px]">DATE</div>
                     <div className="w-[205px]">CITY</div>
@@ -305,6 +305,43 @@ export function LogisticsHub({
                       </div>
                       <p className="font-vt323 text-sm text-amber-dim mt-2 px-1">{gig.note}</p>
                     </div>
+                  ))}
+                </div>
+
+                <div className="mt-3 md:hidden flex flex-col gap-3">
+                  {boardData.map((gig, index) => (
+                    <article key={`${gig.date}-${gig.venue}-${index}`} className="border border-[#222] bg-[#0a0a0a] p-3 rounded">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="font-share text-sm text-[#ffd3a8]">{gig.date}</p>
+                          <p className="font-share text-base text-[#ffdcb8] uppercase leading-tight mt-1 break-words">{gig.venue}</p>
+                          <p className="font-vt323 text-base text-[#ffb57c] mt-1">{gig.city}</p>
+                        </div>
+                        <span className="shrink-0 font-vt323 text-sm text-[#0f0] border border-[#0f0]/40 px-2 py-0.5">[{gig.status}]</span>
+                      </div>
+
+                      <p className="font-vt323 text-sm text-amber-dim mt-2">{gig.note}</p>
+
+                      <div className="mt-3 flex flex-wrap gap-2 items-center">
+                        <a
+                          href={gig.ticketUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                        >
+                          TICKETS
+                        </a>
+                        <a
+                          href={gig.venueUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                        >
+                          VENUE
+                        </a>
+                        <span className="font-vt323 text-xs text-amber-dim ml-auto">T-{getDaysUntil(gig.date)}D</span>
+                      </div>
+                    </article>
                   ))}
                 </div>
               </div>

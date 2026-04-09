@@ -51,12 +51,12 @@ export function Layout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="relative w-full min-h-screen h-dvh bg-black overflow-hidden">
+    <div className="relative w-full min-h-screen md:h-dvh bg-black overflow-x-hidden overflow-y-auto md:overflow-hidden">
       {/* CRT Overlay */}
       <div className="crt-overlay pointer-events-none"></div>
       
       {/* Main Terminal Container */}
-      <div className={`relative w-full h-full bg-[linear-gradient(180deg,#171a1f_0%,#111318_100%)] p-4 md:p-6 flex flex-col gap-4 md:gap-6 ${booting ? 'fishbowl' : 'crt-flicker box-glow-amber'}`}>
+      <div className={`relative w-full min-h-screen md:h-full bg-[linear-gradient(180deg,#171a1f_0%,#111318_100%)] p-4 md:p-6 flex flex-col gap-4 md:gap-6 ${booting ? 'fishbowl' : 'crt-flicker box-glow-amber'}`}>
         
         {/* Header */}
         <header className="border-b-2 border-amber-dim pb-3 shrink-0">
@@ -96,7 +96,7 @@ export function Layout({ children }: { children: ReactNode }) {
               </Link>
             </div>
 
-            <div className="order-3 xl:order-3 w-full max-w-[260px] xl:justify-self-end">
+            <div className="order-3 xl:order-3 w-full max-w-none xl:max-w-[260px] xl:justify-self-end">
               <span className="hidden xl:block font-vt323 text-xs tracking-[0.2em] text-amber-dim uppercase text-left xl:text-right">
                 Stream // Follow
               </span>
@@ -126,14 +126,14 @@ export function Layout({ children }: { children: ReactNode }) {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col md:flex-row gap-5 md:gap-6 min-h-0">
+        <div className="flex-1 flex flex-col md:flex-row gap-5 md:gap-6 md:min-h-0">
           {/* Navigation Sidebar */}
-          <aside className="w-full md:w-80 xl:w-[23rem] shrink-0 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+          <aside className="w-full md:w-80 xl:w-[23rem] shrink-0 flex flex-col gap-4 overflow-visible md:overflow-y-auto custom-scrollbar">
             <Navigation />
           </aside>
 
           {/* Main Display */}
-          <main className="flex-1 bg-[linear-gradient(180deg,#000_0%,#05070a_100%)] border-2 border-amber-dim rounded-xl p-5 md:p-6 overflow-hidden relative box-glow-amber flex flex-col">
+          <main className="flex-1 bg-[linear-gradient(180deg,#000_0%,#05070a_100%)] border-2 border-amber-dim rounded-xl p-5 md:p-6 overflow-visible md:overflow-hidden relative box-glow-amber flex flex-col">
             {booting ? (
               <div className="w-full h-full flex items-center justify-center">
                 <motion.div 
@@ -146,7 +146,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 </motion.div>
               </div>
             ) : (
-              <div className="flex-1 overflow-y-auto overflow-x-hidden pr-2 custom-scrollbar">
+              <div className="flex-1 overflow-visible md:overflow-y-auto overflow-x-hidden md:pr-2 custom-scrollbar">
                 {children}
               </div>
             )}

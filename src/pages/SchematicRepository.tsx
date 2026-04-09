@@ -114,12 +114,12 @@ export function SchematicRepository() {
 
   return (
     <div className="flex flex-col h-full gap-4">
-      <div className="flex justify-between items-center border-b border-amber-dim pb-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b border-amber-dim pb-2">
         <h2 className="font-share text-2xl uppercase tracking-widest text-amber-bright">
           Live Rig Lab
         </h2>
-        <div className="flex items-center gap-3">
-          <span className="font-vt323 text-amber-dim">BLUEPRINT_V2.0 // STAGE_PLOT_2026</span>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <span className="font-vt323 text-amber-dim text-sm md:text-base">BLUEPRINT_V2.0 // STAGE_PLOT_2026</span>
           <Link
             to="/logistics"
             className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"

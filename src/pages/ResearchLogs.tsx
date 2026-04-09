@@ -48,14 +48,14 @@ const logs = [
 export function ResearchLogs() {
   return (
     <div className="flex flex-col gap-4 pb-8">
-      <div className="flex justify-between items-center border-b border-red-dim pb-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 border-b border-red-dim pb-2">
         <h2 className="font-share text-2xl uppercase tracking-widest text-red-bright text-glow-red">
           Mars Acoustics Research
         </h2>
-        <span className="font-vt323 text-red-dim animate-pulse">CLASSIFIED_ACCESS_GRANTED</span>
+        <span className="font-vt323 text-red-dim animate-pulse text-sm md:text-base">CLASSIFIED_ACCESS_GRANTED</span>
       </div>
 
-      <div className="overflow-y-auto custom-scrollbar pr-2 flex flex-col gap-4">
+      <div className="overflow-visible md:overflow-y-auto custom-scrollbar md:pr-2 flex flex-col gap-4">
         <div className="font-vt323 text-red mb-2 border border-red-dim/40 bg-black/65 p-3">
           <p>&gt; ACCESSING EXTRATERRESTRIAL AUDIO LOGS...</p>
           <p>&gt; SUBJECT: JASON ACHILLES</p>

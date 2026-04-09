@@ -28,16 +28,25 @@
 
 @layer base {
   body {
-    @apply text-amber font-vt323 overflow-hidden selection:bg-amber selection:text-terminal-bg;
+    @apply text-amber font-vt323 overflow-x-hidden selection:bg-amber selection:text-terminal-bg;
     background:
       radial-gradient(circle at 14% -8%, rgba(255, 122, 26, 0.13) 0%, rgba(255, 122, 26, 0) 36%),
       radial-gradient(circle at 86% 0%, rgba(38, 246, 253, 0.1) 0%, rgba(38, 246, 253, 0) 42%),
       linear-gradient(180deg, #0e1013 0%, #0b0d11 100%);
     margin: 0;
     padding: 0;
+    min-height: 100dvh;
+    height: auto;
+    width: 100%;
+    line-height: 1.2;
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
-    line-height: 1.2;
   }
 }
 

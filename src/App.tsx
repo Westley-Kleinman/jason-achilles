@@ -13,7 +13,7 @@ import { ResearchLogs } from './pages/ResearchLogs';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Layout>
         <Routes>
           <Route path="/" element={<ObservationDeck />} />

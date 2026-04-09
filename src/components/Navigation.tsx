@@ -79,25 +79,25 @@ export function Navigation() {
             to={item.path}
             onClick={playClick}
             className={({ isActive }) =>
-              `relative group flex items-center gap-3.5 p-4 md:p-[1.05rem] border-2 transition-colors duration-75 ${
+              `relative group flex items-center gap-3.5 p-4 md:p-[1.15rem] border-2 transition-colors duration-75 ${
                 isActive ? colors.active : colors.inactive
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <item.icon className={`w-5 h-5 shrink-0 ${isActive ? 'animate-pulse' : ''}`} />
+                <item.icon className={`w-6 h-6 shrink-0 ${isActive ? 'animate-pulse' : ''}`} />
                 <div className="flex flex-col overflow-hidden">
                   <span
                     className={`font-share uppercase tracking-wider ${
                       isMissionCredentials
-                        ? 'text-base md:text-lg leading-tight whitespace-normal break-words'
-                        : 'text-lg md:text-xl leading-none truncate'
+                        ? 'text-base md:text-xl leading-tight whitespace-normal break-words'
+                        : 'text-xl md:text-2xl leading-none truncate'
                     }`}
                   >
                     {item.label}
                   </span>
-                  <span className={`font-vt323 text-sm md:text-base uppercase mt-1 truncate ${isActive ? '' : 'opacity-70'}`}>
+                  <span className={`font-vt323 text-base uppercase mt-1 truncate ${isActive ? '' : 'opacity-70'}`}>
                     {item.desc}
                   </span>
                 </div>

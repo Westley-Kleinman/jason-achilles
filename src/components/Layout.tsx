@@ -126,9 +126,9 @@ export function Layout({ children }: { children: ReactNode }) {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col md:flex-row gap-5 md:gap-8 min-h-0">
+        <div className="flex-1 flex flex-col md:flex-row gap-5 md:gap-6 min-h-0">
           {/* Navigation Sidebar */}
-          <aside className="w-full md:w-72 xl:w-80 shrink-0 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+          <aside className="w-full md:w-80 xl:w-[23rem] shrink-0 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
             <Navigation />
           </aside>
 

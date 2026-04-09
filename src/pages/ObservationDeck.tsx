@@ -17,16 +17,36 @@ export function ObservationDeck() {
 
   const marsRecordings = [
     {
-      id: 'sound-2',
-      title: 'Sound 2 // Initial Mars Sweep',
+      id: 'sol-0002',
+      title: 'Sol 0002 - First Sounds of Mars [1 min]',
+      subtitle: 'First Martian Wind Capture',
       file: toPublicAsset('audio/sound-2.wav'),
-      note: 'Recovered raw sweep with narrow-band noise and short transients.',
+      release: 'Released to the public during a NASA/JPL press conference on Feb. 22, 2021.',
+      capture:
+        'First sounds of wind blowing on the Martian surface, captured on Sol 02 by the DPA 4006 capsule onboard the Mars Perseverance rover EDLCAM system.',
+      processing:
+        'Audio has been processed to filter out electrical interference caused by internal systems while preserving clarity of sounds moving through the Martian atmosphere.',
+      credits: 'Post-processing by Zandef Deksit Inc. / Mike Houge and Jason Achilles Mezilis.',
+      integration:
+        'Microphone is integrated with the Entry, Descent, and Landing Camera (EDLCAM) system, under direction of David Gruel, NASA/JPL.',
+      sourcePath: 'pds-imaging.jpl.nasa.gov/data/mars202.../data_audio/',
+      license: 'Licensed under Creative Commons.',
     },
     {
-      id: 'sound-16',
-      title: 'Sound 16 // Deep Signal Capture',
+      id: 'sol-0016',
+      title: 'Sol 0016 - Drive Sequence Capture [16 min]',
+      subtitle: 'Extended Rover Drive Sequence',
       file: toPublicAsset('audio/sound-16.wav'),
-      note: 'Long-form transmission sample with low-frequency resonance drift.',
+      release: 'Released by NASA/JPL to the public on Mar. 17, 2021.',
+      capture:
+        'Full 16-minute audio captured during a drive sequence on Sol 16 by the DPA 4006 capsule onboard the Mars Perseverance rover.',
+      processing:
+        'Audio has been processed to filter out electrical interference caused by internal systems while preserving clarity of sounds moving through the Martian atmosphere.',
+      credits: 'Post-processing by Zandef Deksit Inc. / Mike Houge and Jason Achilles Mezilis.',
+      integration:
+        'Microphone is integrated with the Entry, Descent, and Landing Camera (EDLCAM) system, under direction of David Gruel, NASA/JPL.',
+      sourcePath: 'pds-imaging.jpl.nasa.gov/data/mars202.../data_audio/',
+      license: 'Public release available through NASA/JPL archives.',
     },
   ];
 
@@ -77,7 +97,7 @@ export function ObservationDeck() {
       </div>
 
       {/* Video Feed Container */}
-      <div className="relative mx-auto w-full max-w-[980px] xl:max-w-[1080px] aspect-video rounded-lg overflow-hidden p-[2px] bg-gradient-to-r from-[#ff5a00] via-[#ff9d4d] to-[#ff6f1a] shadow-[0_0_24px_rgba(255,122,26,0.35)]">
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden p-[2px] bg-gradient-to-r from-[#ff5a00] via-[#ff9d4d] to-[#ff6f1a] shadow-[0_0_24px_rgba(255,122,26,0.35)]">
         <div className="relative w-full h-full bg-black rounded-[7px] overflow-hidden">
           {/* Scanline overlay specific to video */}
           <div className="absolute inset-0 pointer-events-none z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,6px_100%] opacity-50 mix-blend-overlay"></div>
@@ -136,6 +156,91 @@ export function ObservationDeck() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="rounded p-[1px] bg-gradient-to-r from-[#00595f] via-[#26f6fd] to-[#00828c] shadow-[0_0_22px_rgba(38,246,253,0.24)]">
+        <section className="border border-[#26f6fd]/45 bg-[#020a0b] rounded-[7px] p-4 md:p-5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-[#26f6fd]/25 pb-2">
+            <h3 className="font-share text-xl md:text-2xl tracking-wider uppercase text-[#c8feff]">
+              Featured Mars Audio Archive
+            </h3>
+            <span className="font-vt323 text-sm md:text-base uppercase tracking-wider text-[#8feaf0]">
+              Sol 0002 + Sol 0016 // EDLCAM Capsule Data
+            </span>
+          </div>
+
+          <p className="mt-3 font-vt323 text-lg text-[#bffcff] leading-snug">
+            These two files are a major part of the Jason Achilles story: authentic Martian atmosphere recordings
+            captured by the Perseverance rover microphone system and post-processed for public listening clarity.
+          </p>
+
+          <div className="mt-4 grid grid-cols-1 xl:grid-cols-2 gap-4">
+            {marsRecordings.map((recording) => (
+              <article key={recording.id} className="border border-[#26f6fd]/30 bg-black/70 rounded p-3 md:p-4">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                  <div>
+                    <h4 className="font-share text-base md:text-lg tracking-wide uppercase text-[#ccfeff] leading-tight">
+                      {recording.title}
+                    </h4>
+                    <p className="font-vt323 text-sm md:text-base text-[#8feaf0] mt-0.5">
+                      {recording.subtitle}
+                    </p>
+                  </div>
+                  <span className="inline-block border border-[#26f6fd]/45 px-2 py-0.5 font-vt323 text-xs text-[#bffcff] uppercase tracking-wider">
+                    NASA/JPL Source
+                  </span>
+                </div>
+
+                <audio controls preload="none" className="mt-3 w-full">
+                  <source src={recording.file} type="audio/wav" />
+                  Your browser does not support WAV playback.
+                </audio>
+
+                <div className="mt-3 space-y-2 font-vt323 text-sm md:text-base text-[#bffcff] leading-snug">
+                  <p>
+                    <span className="text-[#d8feff]">Capture:</span> {recording.capture}
+                  </p>
+                  <p>
+                    <span className="text-[#d8feff]">Release:</span> {recording.release}
+                  </p>
+                  <p>
+                    <span className="text-[#d8feff]">Processing:</span> {recording.processing}
+                  </p>
+                  <p>
+                    <span className="text-[#d8feff]">Post-processing:</span> {recording.credits}
+                  </p>
+                  <p>
+                    <span className="text-[#d8feff]">System Integration:</span> {recording.integration}
+                  </p>
+                  <p>
+                    <span className="text-[#d8feff]">NASA Reference Path:</span> {recording.sourcePath}
+                  </p>
+                  <p>
+                    <span className="text-[#d8feff]">License:</span> {recording.license}
+                  </p>
+                </div>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <a
+                    href={recording.file}
+                    download
+                    className="inline-block border border-[#26f6fd]/60 px-3 py-1.5 font-share text-xs md:text-sm tracking-wider text-[#c8feff] hover:bg-[#26f6fd]/15 transition-colors"
+                  >
+                    DOWNLOAD AUDIO
+                  </a>
+                  <a
+                    href="https://pds-imaging.jpl.nasa.gov/data/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block border border-[#26f6fd]/40 px-3 py-1.5 font-share text-xs md:text-sm tracking-wider text-[#8feaf0] hover:border-[#26f6fd] hover:bg-[#26f6fd]/10 transition-colors"
+                  >
+                    OPEN NASA DATA PORTAL
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
 
       <div className="border border-[#ff8b3d]/50 bg-terminal-panel rounded p-3">
@@ -205,47 +310,6 @@ export function ObservationDeck() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="rounded p-[1px] bg-gradient-to-r from-[#00595f] via-[#26f6fd] to-[#00828c] shadow-[0_0_20px_rgba(38,246,253,0.22)]">
-        <section className="border border-[#26f6fd]/45 bg-[#020a0b] rounded-[7px] p-4 md:p-5">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-[#26f6fd]/25 pb-2">
-            <h3 className="font-share text-xl md:text-2xl tracking-wider uppercase text-[#c8feff]">
-              Mars Archive // Initial Recordings
-            </h3>
-            <span className="font-vt323 text-sm md:text-base uppercase tracking-wider text-[#8feaf0]">
-              Playback Channel: Open
-            </span>
-          </div>
-
-          <p className="mt-3 font-vt323 text-lg text-[#bffcff] leading-snug">
-            Two early Mars field recordings are now available for direct monitoring.
-          </p>
-
-          <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {marsRecordings.map((recording) => (
-              <div key={recording.id} className="border border-[#26f6fd]/30 bg-black/70 rounded p-3 md:p-4">
-                <div className="font-share text-[#ccfeff] text-base md:text-lg tracking-wide uppercase leading-tight">
-                  {recording.title}
-                </div>
-                <p className="mt-1 font-vt323 text-sm md:text-base text-[#8feaf0] leading-snug">
-                  {recording.note}
-                </p>
-                <audio controls preload="none" className="mt-3 w-full">
-                  <source src={recording.file} type="audio/wav" />
-                  Your browser does not support WAV playback.
-                </audio>
-                <a
-                  href={recording.file}
-                  download
-                  className="mt-3 inline-block border border-[#26f6fd]/60 px-3 py-1.5 font-share text-xs md:text-sm tracking-wider text-[#c8feff] hover:bg-[#26f6fd]/15 transition-colors"
-                >
-                  DOWNLOAD SOURCE
-                </a>
-              </div>
-            ))}
-          </div>
-        </section>
       </div>
     </div>
   );

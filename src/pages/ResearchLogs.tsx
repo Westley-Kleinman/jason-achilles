@@ -75,7 +75,7 @@ export function ResearchLogs() {
               to="/logistics"
               className="border border-red px-3 py-1.5 font-share text-xs tracking-wider text-red-bright hover:bg-red hover:text-black transition-colors"
             >
-              OPEN TRAJECTORY BOARD
+              OPEN LAUNCH VECTOR
             </Link>
             <Link
               to="/"

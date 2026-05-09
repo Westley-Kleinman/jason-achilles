@@ -263,7 +263,7 @@ export function SchematicRepository() {
         <div className="mt-2 font-vt323 text-xs text-amber-dim">
           &gt; SOURCE: STAGE PLOT 2026 (STRUCTURED FOR WEB) // FIELD VALIDATION PATH:
           <Link to="/logistics" className="text-amber hover:text-amber-bright underline ml-1">
-            OPEN TRAJECTORY BOARD
+            OPEN LAUNCH VECTOR
           </Link>
         </div>
       </div>

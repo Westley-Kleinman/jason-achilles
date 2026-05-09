@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 
 type TrajectoryStop = {
   date: string;
@@ -91,17 +92,18 @@ const mapBandsintownEvent = (event: any): TrajectoryStop => {
   };
 };
 
+
 const SplitFlapText = ({ text, length }: { text: string; length: number }) => {
   const padded = text.toUpperCase().padEnd(length, ' ').slice(0, length);
 
   return (
-    <div className="flex">
+    <div className="flex gap-[3px]">
       {padded.split('').map((char, index) => {
         const glyph = char === ' ' ? '\u00A0' : char;
         return (
           <div
             key={`${index}-${char}`}
-            className="relative inline-flex w-4 h-6 md:w-5 md:h-8 mx-[1px] items-center justify-center bg-[#111] border border-[#333] font-share text-[#ffd3a8] text-[11px] md:text-sm shadow-inner overflow-hidden"
+            className="relative inline-flex w-6 h-8 md:w-7 md:h-10 items-center justify-center bg-[#0b0f14] border border-[#4a4a4a] font-vt323 text-[#fff1dc] text-base md:text-xl tracking-[0.08em] shadow-[inset_0_0_8px_rgba(0,0,0,0.85)] overflow-hidden"
           >
             <span className="absolute left-0 right-0 top-1/2 h-px bg-black/80"></span>
             <span className="relative z-10">{glyph}</span>
@@ -121,6 +123,7 @@ export function LogisticsHub({
   const [trajectoryData, setTrajectoryData] = useState<TrajectoryStop[]>(fallbackTrajectoryData);
   const [loadingTrajectory, setLoadingTrajectory] = useState(true);
   const [trajectorySource, setTrajectorySource] = useState<'bandsintown' | 'fallback'>('fallback');
+  const [rotationIndex, setRotationIndex] = useState(0);
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -186,9 +189,27 @@ export function LogisticsHub({
     };
   }, []);
 
+  useEffect(() => {
+    setRotationIndex(0);
+  }, [trajectoryData]);
+
   const boardData = trajectoryData.slice(0, 8);
   const nextDeployment = boardData.find((stop) => stop.status === 'CONFIRMED') ?? boardData[0];
   const daysUntilDeployment = getDaysUntil(nextDeployment.date);
+  const rotationSafeIndex = boardData.length > 0 ? rotationIndex % boardData.length : 0;
+  const rotatingStop = boardData[rotationSafeIndex];
+
+  useEffect(() => {
+    if (activeTab !== 'TRAJECTORY' || boardData.length <= 1) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setRotationIndex((prev) => (prev + 1) % boardData.length);
+    }, 5200);
+
+    return () => clearInterval(interval);
+  }, [activeTab, boardData.length]);
 
   return (
     <div className="flex flex-col h-full gap-4">
@@ -267,45 +288,131 @@ export function LogisticsHub({
                   </div>
                 </div>
 
-                <div className="mt-3 hidden md:flex flex-col gap-3 overflow-x-auto custom-scrollbar pb-2">
-                  <div className="flex gap-4 min-w-[1040px] font-vt323 text-amber-dim text-sm px-2">
-                    <div className="w-[118px]">DATE</div>
-                    <div className="w-[205px]">CITY</div>
-                    <div className="w-[248px]">VENUE</div>
-                    <div>STATUS</div>
-                    <div className="ml-auto">ACTION</div>
-                  </div>
-
-                  {boardData.map((gig, index) => (
-                    <div key={`${gig.date}-${gig.venue}-${index}`} className="bg-[#0a0a0a] p-2 border border-[#222] min-w-[1040px]">
-                      <div className="flex gap-4 items-center">
-                        <SplitFlapText text={gig.date} length={10} />
-                        <SplitFlapText text={gig.city} length={17} />
-                        <SplitFlapText text={gig.venue} length={21} />
-                        <div className="font-vt323 text-lg px-2 text-[#0f0]">[{gig.status}]</div>
-                        <div className="ml-auto flex items-center gap-2">
-                          <span className="font-vt323 text-xs text-amber-dim">T-{getDaysUntil(gig.date)}D</span>
+                {rotatingStop ? (
+                  <div className="mt-4 border border-[#ff7a1a]/45 bg-[#100804] rounded p-3 md:p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 font-vt323 text-xs uppercase tracking-[0.2em] text-[#ffc18f]">
+                      <span>Rotating Launch Feed</span>
+                      <span className="text-[#ffb57c]">AUTO-ROTATE ACTIVE</span>
+                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${rotatingStop.date}-${rotatingStop.venue}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.35 }}
+                        className="mt-3 flex flex-col gap-2"
+                      >
+                        <div className="font-share text-lg md:text-2xl text-[#ffd4ad] uppercase tracking-wide">
+                          {rotatingStop.date} // {rotatingStop.venue}
+                        </div>
+                        <div className="font-vt323 text-base md:text-lg text-[#ffb57c]">
+                          {rotatingStop.city}
+                        </div>
+                        <div className="font-vt323 text-sm md:text-base text-amber-dim">
+                          {rotatingStop.note}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
                           <a
-                            href={gig.ticketUrl}
+                            href={rotatingStop.ticketUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                            className="border border-[#ff7a1a] px-3 py-1.5 font-share text-xs md:text-sm tracking-wider text-[#ffd4ad] hover:bg-[#ff7a1a] hover:text-black transition-colors"
                           >
                             TICKETS
                           </a>
                           <a
-                            href={gig.venueUrl}
+                            href={rotatingStop.venueUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                            className="border border-[#ff7a1a]/60 px-3 py-1.5 font-share text-xs md:text-sm tracking-wider text-[#ffc18f] hover:border-[#ff7a1a] hover:bg-[#ff7a1a]/15 transition-colors"
                           >
                             VENUE
                           </a>
+                          <span className="ml-auto font-vt323 text-xs md:text-sm text-amber-dim">
+                            T-{getDaysUntil(rotatingStop.date)}D
+                          </span>
                         </div>
-                      </div>
-                      <p className="font-vt323 text-sm text-amber-dim mt-2 px-1">{gig.note}</p>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                ) : null}
+
+                <div className="mt-4 hidden md:flex flex-col gap-3 overflow-x-auto custom-scrollbar pb-2">
+                  <div className="flex gap-6 min-w-[1180px] font-vt323 text-[#ffdcb8] text-base tracking-[0.16em] px-2">
+                    <div className="w-[130px]">DATE</div>
+                    <div className="w-[230px]">CITY</div>
+                    <div className="w-[320px]">VENUE</div>
+                    <div>STATUS</div>
+                    <div className="ml-auto">ACTION</div>
+                  </div>
+
+                  {rotatingStop ? (
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${rotatingStop.date}-${rotatingStop.venue}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.35 }}
+                        className="bg-[#0a0a0a] p-3 border border-[#222] min-w-[1180px]"
+                      >
+                        <div className="flex gap-4 items-center text-base">
+                          <div className="relative overflow-hidden w-[720px]">
+                            <div className="marquee-track-row">
+                              <div className="flex gap-4 items-center">
+                                <div className="w-[130px]">
+                                  <SplitFlapText text={rotatingStop.date} length={10} />
+                                </div>
+                                <div className="w-[230px]">
+                                  <SplitFlapText text={rotatingStop.city} length={18} />
+                                </div>
+                                <div className="w-[320px]">
+                                  <SplitFlapText text={rotatingStop.venue} length={24} />
+                                </div>
+                              </div>
+                              <div className="flex gap-4 items-center" aria-hidden="true">
+                                <div className="w-[130px]">
+                                  <SplitFlapText text={rotatingStop.date} length={10} />
+                                </div>
+                                <div className="w-[230px]">
+                                  <SplitFlapText text={rotatingStop.city} length={18} />
+                                </div>
+                                <div className="w-[320px]">
+                                  <SplitFlapText text={rotatingStop.venue} length={24} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="font-vt323 text-xl px-2 text-[#0f0]">[{rotatingStop.status}]</div>
+                          <div className="ml-auto flex items-center gap-2">
+                            <span className="font-vt323 text-sm text-amber-dim">T-{getDaysUntil(rotatingStop.date)}D</span>
+                            <a
+                              href={rotatingStop.ticketUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="border border-amber-dim px-2 py-1.5 font-vt323 text-sm text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                            >
+                              TICKETS
+                            </a>
+                            <a
+                              href={rotatingStop.venueUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="border border-amber-dim px-2 py-1.5 font-vt323 text-sm text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                            >
+                              VENUE
+                            </a>
+                          </div>
+                        </div>
+                        <p className="font-vt323 text-base text-amber-dim mt-2 px-1">{rotatingStop.note}</p>
+                      </motion.div>
+                    </AnimatePresence>
+                  ) : (
+                    <div className="bg-[#0a0a0a] p-3 border border-[#222] min-w-[1180px] font-vt323 text-amber-dim">
+                      No upcoming events found.
                     </div>
-                  ))}
+                  )}
                 </div>
 
                 <div className="mt-3 md:hidden flex flex-col gap-3">
@@ -313,21 +420,21 @@ export function LogisticsHub({
                     <article key={`${gig.date}-${gig.venue}-${index}`} className="border border-[#222] bg-[#0a0a0a] p-3 rounded">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="font-share text-sm text-[#ffd3a8]">{gig.date}</p>
-                          <p className="font-share text-base text-[#ffdcb8] uppercase leading-tight mt-1 break-words">{gig.venue}</p>
-                          <p className="font-vt323 text-base text-[#ffb57c] mt-1">{gig.city}</p>
+                          <p className="font-share text-base text-[#ffd3a8]">{gig.date}</p>
+                          <p className="font-share text-lg text-[#ffdcb8] uppercase leading-tight mt-1 break-words">{gig.venue}</p>
+                          <p className="font-vt323 text-lg text-[#ffb57c] mt-1">{gig.city}</p>
                         </div>
                         <span className="shrink-0 font-vt323 text-sm text-[#0f0] border border-[#0f0]/40 px-2 py-0.5">[{gig.status}]</span>
                       </div>
 
-                      <p className="font-vt323 text-sm text-amber-dim mt-2">{gig.note}</p>
+                      <p className="font-vt323 text-base text-amber-dim mt-2">{gig.note}</p>
 
                       <div className="mt-3 flex flex-wrap gap-2 items-center">
                         <a
                           href={gig.ticketUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                          className="border border-amber-dim px-2 py-1.5 font-vt323 text-sm text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
                         >
                           TICKETS
                         </a>
@@ -335,11 +442,11 @@ export function LogisticsHub({
                           href={gig.venueUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
+                          className="border border-amber-dim px-2 py-1.5 font-vt323 text-sm text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
                         >
                           VENUE
                         </a>
-                        <span className="font-vt323 text-xs text-amber-dim ml-auto">T-{getDaysUntil(gig.date)}D</span>
+                        <span className="font-vt323 text-sm text-amber-dim ml-auto">T-{getDaysUntil(gig.date)}D</span>
                       </div>
                     </article>
                   ))}

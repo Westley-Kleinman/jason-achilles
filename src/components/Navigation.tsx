@@ -4,11 +4,11 @@ import { Activity, Cpu, Disc, Map, Package, Rocket } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Signal Broadcast', icon: Activity, desc: 'Band Overview', color: 'signal' },
-  { path: '/logistics', label: 'Trajectory Board', icon: Map, desc: 'Shows and Tickets', color: 'trajectory' },
-  { path: '/merch', label: 'Supply Vault', icon: Package, desc: 'Merch and Drops', color: 'cyan' },
+  { path: '/logistics', label: 'Launch Vector', icon: Map, desc: 'Shows and Tickets', color: 'trajectory' },
+  { path: '/discography', label: 'Mars Acoustic Research', icon: Disc, desc: 'Audio + Press Dossier', color: 'purple' },
   { path: '/schematics', label: 'Live Rig Lab', icon: Cpu, desc: 'Gear and Setup', color: 'rigblue' },
-  { path: '/discography', label: 'Tape Archive', icon: Disc, desc: 'Recorded Specimens', color: 'purple' },
-  { path: '/research', label: 'Mission Credentials', icon: Rocket, desc: 'Mars Audio Legacy', color: 'red' },
+  { path: '/research', label: 'Mission Critical', icon: Rocket, desc: 'Mars Audio Legacy', color: 'red' },
+  { path: '/merch', label: 'Supply Vault', icon: Package, desc: 'Merch and Drops', color: 'cyan' },
 ];
 
 const colorMap: Record<string, { active: string, inactive: string, indicator: string }> = {

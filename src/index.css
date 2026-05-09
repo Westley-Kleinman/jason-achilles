@@ -83,6 +83,30 @@
   .box-glow-cyan { box-shadow: 0 0 10px var(--color-cyan-dim), inset 0 0 10px var(--color-cyan-dim); }
   .box-glow-green { box-shadow: 0 0 10px var(--color-green-dim), inset 0 0 10px var(--color-green-dim); }
   .box-glow-red { box-shadow: 0 0 10px var(--color-red-dim), inset 0 0 10px var(--color-red-dim); }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    white-space: nowrap;
+    animation: marquee 18s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-track > span {
+    padding-right: 2.5rem;
+  }
+
+  .marquee-track-row {
+    display: flex;
+    width: max-content;
+    white-space: nowrap;
+    animation: marquee 28s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-track-row > div {
+    padding-right: 3rem;
+  }
 }
 
 @keyframes flicker {
@@ -121,6 +145,11 @@
   }
 }
 
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 12px;
 }
@@ -146,6 +175,24 @@
   .animate-ping,
   .animate-spin {
     animation: none !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .marquee-track > span:last-child {
+    display: none;
+  }
+
+  .marquee-track-row {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .marquee-track-row > div:last-child {
+    display: none;
   }
 }
 

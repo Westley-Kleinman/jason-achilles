@@ -219,7 +219,6 @@ export function Layout({ children }: { children: ReactNode }) {
 
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {socialLinks.map((social) => {
-                  const Icon = social.icon;
                   return (
                     <div
                       key={social.label}
@@ -232,8 +231,7 @@ export function Layout({ children }: { children: ReactNode }) {
                         className="group h-12 px-2 flex flex-col items-center justify-center gap-1 rounded-[3px] bg-black/85 text-[#ffd3a8] hover:bg-black/70 transition-colors duration-200"
                         aria-label={`Open ${social.label}`}
                       >
-                        <Icon className="w-5 h-5 stroke-[1.8] text-[#ffd3a8] group-hover:text-white" />
-                        <span className="font-share text-xs md:text-sm tracking-[0.26em] leading-none">
+                        <span className="font-share text-base md:text-lg lg:text-xl tracking-[0.1em] md:tracking-[0.15em] leading-none whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">
                           {social.label}
                         </span>
                       </a>

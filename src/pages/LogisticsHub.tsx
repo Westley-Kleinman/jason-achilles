@@ -340,10 +340,8 @@ export function LogisticsHub({
 
                 <div className="mt-4 hidden md:flex flex-col gap-3 overflow-x-auto custom-scrollbar pb-2">
                   <div className="flex gap-6 min-w-[1180px] font-vt323 text-[#ffdcb8] text-base tracking-[0.16em] px-2">
-                    <div className="w-[130px]">DATE</div>
-                    <div className="w-[230px]">CITY</div>
-                    <div className="w-[320px]">VENUE</div>
-                    <div>STATUS</div>
+                    <div className="w-[720px]">LAUNCH FEED PAYLOAD</div>
+                    <div className="w-[120px]">STATUS</div>
                     <div className="ml-auto">ACTION</div>
                   </div>
 
@@ -351,40 +349,31 @@ export function LogisticsHub({
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={`${rotatingStop.date}-${rotatingStop.venue}`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.35 }}
+                        initial={{ opacity: 0, y: 15, filter: 'blur(2px)' }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        exit={{ opacity: 0, y: -15, filter: 'blur(2px)' }}
+                        transition={{ duration: 0.4 }}
                         className="bg-[#0a0a0a] p-3 border border-[#222] min-w-[1180px]"
                       >
                         <div className="flex gap-4 items-center text-base">
-                          <div className="relative overflow-hidden w-[720px]">
+                          <div 
+                            className="relative overflow-hidden w-[720px]"
+                            style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent)' }}
+                          >
                             <div className="marquee-track-row">
-                              <div className="flex gap-4 items-center">
-                                <div className="w-[130px]">
-                                  <SplitFlapText text={rotatingStop.date} length={10} />
-                                </div>
-                                <div className="w-[230px]">
-                                  <SplitFlapText text={rotatingStop.city} length={18} />
-                                </div>
-                                <div className="w-[320px]">
-                                  <SplitFlapText text={rotatingStop.venue} length={24} />
-                                </div>
+                              <div className="flex gap-6 items-center pl-2">
+                                <SplitFlapText text={rotatingStop.date} length={10} />
+                                <SplitFlapText text={rotatingStop.city} length={18} />
+                                <SplitFlapText text={rotatingStop.venue} length={24} />
                               </div>
-                              <div className="flex gap-4 items-center" aria-hidden="true">
-                                <div className="w-[130px]">
-                                  <SplitFlapText text={rotatingStop.date} length={10} />
-                                </div>
-                                <div className="w-[230px]">
-                                  <SplitFlapText text={rotatingStop.city} length={18} />
-                                </div>
-                                <div className="w-[320px]">
-                                  <SplitFlapText text={rotatingStop.venue} length={24} />
-                                </div>
+                              <div className="flex gap-6 items-center pl-2" aria-hidden="true">
+                                <SplitFlapText text={rotatingStop.date} length={10} />
+                                <SplitFlapText text={rotatingStop.city} length={18} />
+                                <SplitFlapText text={rotatingStop.venue} length={24} />
                               </div>
                             </div>
                           </div>
-                          <div className="font-vt323 text-xl px-2 text-[#0f0]">[{rotatingStop.status}]</div>
+                          <div className="w-[120px] font-vt323 text-xl px-2 text-[#0f0]">[{rotatingStop.status}]</div>
                           <div className="ml-auto flex items-center gap-2">
                             <span className="font-vt323 text-sm text-amber-dim">T-{getDaysUntil(rotatingStop.date)}D</span>
                             <a

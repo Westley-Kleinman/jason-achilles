@@ -48,7 +48,7 @@ describe('ObservationDeck', () => {
     expect(screen.queryByTestId('glitch-screen')).not.toBeInTheDocument();
 
     // Find the button for Channel 2
-    const channel2Button = screen.getByText('CH2');
+    const channel2Button = screen.getAllByLabelText('Switch to Most Recent Post')[0];
 
     // Click to switch channel (interrupt stream)
     act(() => {

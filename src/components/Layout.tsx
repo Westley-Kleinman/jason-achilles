@@ -11,44 +11,60 @@ const toPublicAsset = (relativePath: string) => `${import.meta.env.BASE_URL}${re
 const socialLinks = [
   {
     href: 'https://open.spotify.com/artist/6ZmdI39EPLuZ7tcnaCIMnQ',
-    label: 'SPOTIFY',
+    label: 'Spotify',
     icon: Headphones,
   },
   {
     href: 'https://music.apple.com/us/artist/jason-achilles/1484407411',
-    label: 'APPLE',
+    label: 'Apple Music',
     icon: Music,
   },
   {
     href: 'https://www.youtube.com/c/JasonAchilles',
-    label: 'YOUTUBE',
+    label: 'YouTube',
     icon: Youtube,
   },
   {
     href: 'https://www.instagram.com/jasonachillesmezilis/',
-    label: 'INSTAGRAM',
+    label: 'Instagram',
     icon: Instagram,
   },
 ];
 
 type BandsintownEvent = {
   datetime?: string;
+  url?: string;
+  offers?: Array<{ url?: string; type?: string }>;
   venue?: {
     name?: string;
     city?: string;
     region?: string;
     country?: string;
+    url?: string;
   };
   title?: string;
 };
 
 const BIT_ARTIST_ID = 'id_15307403';
 const BIT_APP_ID = '14465519612d514499d35a76c971c904';
+const DEFAULT_TICKET_URL = 'https://www.bandsintown.com/a/15307403';
 
-const fallbackNextShowTicker = [
-  "04.11 // YURI'S NIGHT (LA) // LOS ANGELES",
-  '04.25 // DOME FEST WEST // BOULDER',
-  '08.12 // ICELAND ECLIPSE FESTIVAL // HELLISSANDUR',
+const fallbackShows = [
+  {
+    date: '2026-04-11',
+    text: "04.11 // YURI'S NIGHT (LA) // LOS ANGELES",
+    ticketUrl: 'https://yurisnight.net/',
+  },
+  {
+    date: '2026-04-25',
+    text: '04.25 // DOME FEST WEST // BOULDER',
+    ticketUrl: 'https://domfestwest.com/',
+  },
+  {
+    date: '2026-08-12',
+    text: '08.12 // ICELAND ECLIPSE FESTIVAL // HELLISSANDUR',
+    ticketUrl: 'https://icelandeclipse.is/',
+  },
 ];
 
 const formatTickerDate = (date: string) => {
@@ -71,11 +87,18 @@ const normalizeTickerLocation = (venue?: BandsintownEvent['venue']) => {
   return parts.join(', ').toUpperCase();
 };
 
+const mapEventTicketUrl = (event: BandsintownEvent) => {
+  const offers = Array.isArray(event.offers) ? event.offers : [];
+  const ticketOffer =
+    offers.find((offer) => String(offer?.type || '').toLowerCase().includes('ticket')) || offers[0];
+  return ticketOffer?.url || event.url || event.venue?.url || DEFAULT_TICKET_URL;
+};
+
 export function Layout({ children }: { children: ReactNode }) {
   const [booting, setBooting] = useState(true);
   const [logoIndex, setLogoIndex] = useState(0);
   const [showLogoFallback, setShowLogoFallback] = useState(false);
-  const [tickerItems, setTickerItems] = useState(fallbackNextShowTicker);
+  const [showItems, setShowItems] = useState(fallbackShows);
 
   useEffect(() => {
     const timer = setTimeout(() => setBooting(false), 2400);
@@ -86,7 +109,7 @@ export function Layout({ children }: { children: ReactNode }) {
     let isMounted = true;
     const controller = new AbortController();
 
-    const loadTicker = async () => {
+    const loadShows = async () => {
       try {
         const response = await fetch(
           `https://rest.bandsintown.com/artists/${encodeURIComponent(BIT_ARTIST_ID)}/events?app_id=${BIT_APP_ID}`,
@@ -114,6 +137,7 @@ export function Layout({ children }: { children: ReactNode }) {
             return {
               date,
               text: `${formatTickerDate(date)} // ${venue} // ${city}`,
+              ticketUrl: mapEventTicketUrl(event),
             };
           })
           .filter((event) => {
@@ -121,23 +145,22 @@ export function Layout({ children }: { children: ReactNode }) {
             return !Number.isNaN(parsedDate.getTime()) && parsedDate.getTime() >= todayStart.getTime();
           })
           .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-          .map((event) => event.text)
           .slice(0, 6);
 
         if (!isMounted) return;
 
         if (mapped.length > 0) {
-          setTickerItems(mapped);
+          setShowItems(mapped);
         } else {
-          setTickerItems(fallbackNextShowTicker);
+          setShowItems(fallbackShows);
         }
       } catch (error) {
         if (!isMounted || controller.signal.aborted) return;
-        setTickerItems(fallbackNextShowTicker);
+        setShowItems(fallbackShows);
       }
     };
 
-    loadTicker();
+    loadShows();
 
     return () => {
       isMounted = false;
@@ -154,31 +177,34 @@ export function Layout({ children }: { children: ReactNode }) {
     setShowLogoFallback(true);
   };
 
-  const nextShowText = tickerItems.join('   //   ');
+  const nextShow = showItems[0];
+  const nextShowText = showItems.map((show) => show.text).join('   //   ');
 
   return (
     <div className="relative w-full min-h-screen md:h-dvh bg-black overflow-x-hidden overflow-y-auto md:overflow-hidden">
-      {/* CRT Overlay */}
       <div className="crt-overlay pointer-events-none"></div>
-      
-      {/* Main Terminal Container */}
-      <div className={`relative w-full min-h-screen md:h-full bg-[linear-gradient(180deg,#171a1f_0%,#111318_100%)] p-4 md:p-6 flex flex-col gap-4 md:gap-6 ${booting ? 'fishbowl' : 'crt-flicker box-glow-amber'}`}>
-        
-        {/* Header */}
+
+      <div
+        className={`relative w-full min-h-screen md:h-full bg-[linear-gradient(180deg,#171a1f_0%,#111318_100%)] p-4 md:p-6 flex flex-col gap-4 md:gap-6 pb-24 md:pb-6 ${booting ? 'fishbowl' : 'crt-flicker box-glow-amber'}`}
+      >
         <header className="border-b-2 border-amber-dim pb-3 shrink-0">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(340px,1fr)_auto_minmax(340px,1fr)] items-center gap-3 md:gap-4">
             <div className="order-2 xl:order-1 min-w-0 xl:justify-self-start xl:pr-12">
               <p className="font-share text-amber-bright text-lg md:text-xl tracking-[0.08em] leading-tight">
-                Sonic Research Terminal v2.4 // Online
+                Jason Achilles // Live Terminal
               </p>
               <p className="mt-0.5 font-vt323 text-base md:text-lg text-amber-dim leading-tight tracking-wide">
                 EXPERIMENTAL HEAVY ROCK // BROADCAST IN REAL TIME
               </p>
               <div className="mt-1.5 flex flex-wrap items-center gap-2 md:gap-3 font-vt323 text-lg md:text-xl leading-tight">
-                <span className="text-amber-dim text-sm md:text-base tracking-[0.14em] uppercase">Next Deployment:</span>
+                <span className="text-amber-dim text-sm md:text-base tracking-[0.14em] uppercase">
+                  Next Show:
+                </span>
                 <div className="relative flex-1 min-w-[220px] max-w-full xl:max-w-[360px] overflow-hidden">
                   <div className="marquee-track">
-                    <span className="text-[#95ff7a] drop-shadow-[0_0_8px_rgba(149,255,122,0.55)]">{nextShowText}</span>
+                    <span className="text-[#95ff7a] drop-shadow-[0_0_8px_rgba(149,255,122,0.55)]">
+                      {nextShowText}
+                    </span>
                     <span
                       className="text-[#95ff7a] drop-shadow-[0_0_8px_rgba(149,255,122,0.55)]"
                       aria-hidden="true"
@@ -190,7 +216,6 @@ export function Layout({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            {/* Centered Logo */}
             <div className="order-1 xl:order-2 flex items-center justify-center xl:justify-self-center">
               <Link
                 to="/"
@@ -213,48 +238,58 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
 
             <div className="order-3 xl:order-3 w-full max-w-none xl:max-w-[260px] xl:justify-self-end">
-              <span className="hidden xl:block font-vt323 text-xs tracking-[0.2em] text-amber-dim uppercase text-left xl:text-right">
+              <span className="font-vt323 text-xs tracking-[0.2em] text-amber-dim uppercase text-center xl:text-right">
                 Stream // Follow
               </span>
 
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                {socialLinks.map((social) => {
-                  return (
-                    <div
-                      key={social.label}
-                      className="rounded-[4px] p-[1px] bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8]"
+              <div className="mt-2 flex xl:hidden items-center justify-center xl:justify-end gap-2">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-[4px] border border-[#ff7a1a]/60 bg-black/85 text-[#ffd3a8] hover:bg-[#ff7a1a]/20 transition-colors duration-200"
+                    aria-label={`Open ${social.label}`}
+                  >
+                    <social.icon className="w-5 h-5 md:w-6 md:h-6" />
+                  </a>
+                ))}
+              </div>
+
+              <div className="hidden xl:grid mt-2 grid-cols-2 gap-2">
+                {socialLinks.map((social) => (
+                  <div
+                    key={`${social.label}-label`}
+                    className="rounded-[4px] p-[1px] bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8]"
+                  >
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group h-12 px-2 flex flex-col items-center justify-center gap-1 rounded-[3px] bg-black/85 text-[#ffd3a8] hover:bg-black/70 transition-colors duration-200"
+                      aria-label={`Open ${social.label}`}
                     >
-                      <a
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group h-12 px-2 flex flex-col items-center justify-center gap-1 rounded-[3px] bg-black/85 text-[#ffd3a8] hover:bg-black/70 transition-colors duration-200"
-                        aria-label={`Open ${social.label}`}
-                      >
-                        <span className="font-share text-base md:text-lg lg:text-xl tracking-[0.1em] md:tracking-[0.15em] leading-none whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">
-                          {social.label}
-                        </span>
-                      </a>
-                    </div>
-                  );
-                })}
+                      <span className="font-share text-base lg:text-xl tracking-[0.1em] leading-none whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">
+                        {social.label.toUpperCase()}
+                      </span>
+                    </a>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Content Area */}
         <div className="flex-1 flex flex-col md:flex-row gap-5 md:gap-6 md:min-h-0">
-          {/* Navigation Sidebar */}
           <aside className="w-full md:w-80 xl:w-[23rem] shrink-0 flex flex-col gap-4 overflow-visible md:overflow-y-auto custom-scrollbar">
             <Navigation />
           </aside>
 
-          {/* Main Display */}
           <main className="flex-1 bg-[linear-gradient(180deg,#000_0%,#05070a_100%)] border-2 border-amber-dim rounded-xl p-5 md:p-6 overflow-visible md:overflow-hidden relative box-glow-amber flex flex-col">
             {booting ? (
               <div className="w-full h-full flex items-center justify-center">
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 1, 0, 1] }}
                   transition={{ duration: 0.5, times: [0, 0.2, 0.5, 1] }}
@@ -270,13 +305,47 @@ export function Layout({ children }: { children: ReactNode }) {
             )}
           </main>
         </div>
-        
-        {/* Footer */}
-        <footer className="shrink-0 border-t-2 border-amber-dim pt-2 flex flex-wrap gap-2 justify-between font-share text-xs md:text-sm text-amber-dim">
-          <span>SYS.OP: F. MITCHELL</span>
-          <span>LAT: 34.0522 N // LON: 118.2437 W</span>
+
+        <footer className="shrink-0 border-t-2 border-amber-dim pt-3 flex flex-col gap-2 font-share text-xs md:text-sm text-amber-dim">
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <a href="mailto:jmezilis@gmail.com" className="hover:text-amber transition-colors">
+              CONTACT
+            </a>
+            <Link to="/schematics" className="hover:text-amber transition-colors">
+              LIVE RIG LAB (EPK)
+            </Link>
+            <Link to="/merch" className="hover:text-amber transition-colors">
+              MERCH LOCKER
+            </Link>
+            <Link to="/logistics" className="hover:text-amber transition-colors">
+              SHOWS
+            </Link>
+          </div>
+          <div className="flex flex-wrap gap-2 justify-between">
+            <span>SYS.OP: F. MITCHELL</span>
+            <span>LAT: 34.0522 N // LON: 118.2437 W</span>
+          </div>
         </footer>
       </div>
+
+      {!booting && nextShow ? (
+        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t-2 border-[#84ff6a]/60 bg-[#0b0f0a]/95 backdrop-blur-sm px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="font-vt323 text-xs text-[#84ff6a] uppercase tracking-wider">Next Show</p>
+              <p className="font-share text-sm text-[#ebffe4] truncate">{nextShow.text}</p>
+            </div>
+            <a
+              href={nextShow.ticketUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 border border-[#84ff6a] px-3 py-2 font-share text-xs tracking-wider text-[#ebffe4] hover:bg-[#84ff6a] hover:text-black transition-colors"
+            >
+              TICKETS
+            </a>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

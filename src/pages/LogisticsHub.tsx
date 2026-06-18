@@ -214,9 +214,12 @@ export function LogisticsHub({
   return (
     <div className="flex flex-col h-full gap-4">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b border-amber-dim pb-2">
-        <h2 className="font-share text-2xl uppercase tracking-widest bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8] bg-clip-text text-transparent">
-          Logistics Hub
-        </h2>
+        <div>
+          <h2 className="font-share text-2xl uppercase tracking-widest bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8] bg-clip-text text-transparent">
+            Launch Vector
+          </h2>
+          <p className="font-vt323 text-sm text-amber-dim tracking-wider mt-0.5">Shows & Tickets</p>
+        </div>
         <div className="flex gap-2 w-full sm:w-auto justify-start sm:justify-end">
           <button
             onClick={() => setActiveTab('TRAJECTORY')}
@@ -228,7 +231,7 @@ export function LogisticsHub({
             onClick={() => setActiveTab('SURPLUS')}
             className={`px-3 py-1 font-vt323 text-sm border ${activeTab === 'SURPLUS' ? 'border-[#ff4fc3] bg-[#ff4fc3]/20 text-[#ffd8f2]' : 'border-amber-dim text-amber-dim hover:border-[#ff4fc3] hover:text-[#ffb5e5]'}`}
           >
-            SURPLUS
+            MERCH LOCKER
           </button>
         </div>
       </div>
@@ -446,20 +449,20 @@ export function LogisticsHub({
         ) : (
           <div className="flex flex-col gap-6">
             <div className="font-share text-[#ffc8ec] border-b border-[#ff4fc3]/35 pb-2">
-              SUPPLY VAULT // STAGING_CHANNEL
+              MERCH LOCKER // STAGING_CHANNEL
             </div>
 
             <div className="rounded p-[1px] bg-gradient-to-r from-[#a61b77] via-[#ff4fc3] to-[#ff96dd] shadow-[0_0_18px_rgba(255,79,195,0.25)]">
               <div className="border border-[#ff4fc3]/45 bg-terminal-panel p-5 rounded-[7px] flex flex-col gap-5">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                   <h3 className="font-share text-lg tracking-wider text-[#ffd8f2] uppercase">
-                    SUPPLY VAULT COMING SOON
+                    MERCH LOCKER COMING SOON
                   </h3>
                   <span className="font-vt323 text-sm text-[#ffb5e5]">DROP CHANNEL: CALIBRATING</span>
                 </div>
 
                 <p className="font-vt323 text-lg text-[#ffd8f2] leading-snug">
-                  The vault is being pressurized for future merch deployments. Inventory manifests, limited runs, and
+                  The locker is being pressurized for future merch drops. Apparel, limited runs, and
                   alert signups will appear here soon.
                 </p>
 
@@ -476,7 +479,7 @@ export function LogisticsHub({
                 </div>
 
                 <div className="border border-[#ff4fc3]/30 bg-[#ff4fc3]/10 px-3 py-2 font-vt323 text-sm text-[#ffd8f2] leading-relaxed">
-                  &gt; STATUS: COMING SOON. Supply Vault systems are offline while upcoming drops are staged.
+                  &gt; STATUS: COMING SOON. Merch Locker systems are offline while upcoming drops are staged.
                 </div>
               </div>
             </div>

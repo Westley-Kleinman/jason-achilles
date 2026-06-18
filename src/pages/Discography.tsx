@@ -1,6 +1,6 @@
-import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Activity, ExternalLink, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
+import { IssTrackerPanel } from '../components/IssTrackerPanel';
 
 const launchTransmissions = [
   {
@@ -60,76 +60,26 @@ const marsRecordings = [
   },
 ];
 
-const subjectProfile = [
-  { label: 'NAME', value: 'Jason Achilles' },
-  { label: 'PROJECT', value: 'Analog Rock Research Program' },
-  { label: 'ROLE', value: 'Multi-instrumentalist / Sonic Researcher' },
-  { label: 'CAPABILITIES', value: 'Simultaneous Guitar, Bass, Keys' },
-  { label: 'ACCOMPANIMENT', value: 'Forrest Mitchell (Drums / Operations)' },
-];
-
-const currentObjective = [
-  'Broadcast the next live chapter of the Jason Achilles band in rooms built for raw impact.',
-  'Stress-test songs in real venues, then feed results back into the lab.',
-  'Convert first-time viewers into repeat attendees through immersive story + performance.',
-];
-
-const researchLogs = [
-  {
-    id: 'LOG-01',
-    title: 'Musician Who Designed Microphone for Mars',
-    source: 'WIRED',
-    url: 'https://www.wired.com/story/musician-who-designed-microphone-mars/',
-    date: '2021',
-    status: 'DECRYPTED',
-  },
-  {
-    id: 'LOG-02',
-    title: 'Perseverance Rover Musician Microphone',
-    source: 'KTLA',
-    url: 'https://ktla.com/news/technology/jason-achilles-mezilis-mars-2020-perseverance-rover-musician-microphone/',
-    date: '2021',
-    status: 'DECRYPTED',
-  },
-  {
-    id: 'LOG-03',
-    title: 'Martian Mic Drop',
-    source: 'Planetary Radio',
-    url: 'https://www.planetary.org/planetary-radio/2023-martian-mic-drop',
-    date: '2023',
-    status: 'DECRYPTED',
-  },
-  {
-    id: 'LOG-04',
-    title: 'Music on Mars: If you thought space was silent, take a closer listen',
-    source: 'CBC Radio',
-    url: 'https://www.cbc.ca/radio/ideas/music-on-mars-if-you-thought-space-was-silent-take-a-closer-listen-1.6029648',
-    date: '2021',
-    status: 'DECRYPTED',
-  },
-  {
-    id: 'LOG-05',
-    title: 'Rock guitarist shows students how music can take you to Mars',
-    source: 'TMJ4',
-    url: 'https://www.tmj4.com/news/local-news/los-angeles-rock-guitarist-shows-students-how-music-can-take-you-to-mars',
-    date: '2024',
-    status: 'DECRYPTED',
-  },
+const credentialsProfile = [
+  { label: 'SUBJECT', value: 'Jason Achilles Mezilis' },
+  { label: 'MISSION', value: 'Mars 2020 Perseverance Rover Microphone (EDLCAM)' },
+  { label: 'ROLE', value: 'Audio Engineer / Microphone Design' },
+  { label: 'INTEGRATION', value: 'NASA/JPL Entry, Descent, and Landing Camera system' },
+  { label: 'POST-PROCESSING', value: 'Zandef Deksit Inc. / Mike Houge and Jason Achilles Mezilis' },
 ];
 
 const signalIndicators = [
   { label: 'ARCHIVE ONLINE', color: 'bg-[#26f6fd]' },
   { label: 'EDLCAM AUDIO', color: 'bg-[#80ffff]' },
-  { label: 'PRESS LOGS', color: 'bg-[#ff5f85]' },
-  { label: 'VISUAL FEED', color: 'bg-[#a97bff]' },
+  { label: 'ISS TRACKER', color: 'bg-[#a97bff]' },
+  { label: 'NASA SOURCE', color: 'bg-[#ff5f85]' },
 ];
 
 const quickAccessLinks = [
-  { id: 'launch-vector', label: 'Launch Vector', href: '/logistics', type: 'internal' },
+  { id: 'iss-tracker', label: 'ISS Tracker', href: '#iss-tracker', type: 'anchor' },
   { id: 'audio-archive', label: 'Mars Audio Archive', href: '#audio-archive', type: 'anchor' },
-  { id: 'research-logs', label: 'Research Logs', href: '#research-logs', type: 'anchor' },
+  { id: 'press-archive', label: 'Press Archive', href: '/research', type: 'internal' },
   { id: 'nasa-portal', label: 'NASA Data Portal', href: 'https://pds-imaging.jpl.nasa.gov/data/', type: 'external' },
-  { id: 'youtube', label: 'YouTube Feed', href: 'https://www.youtube.com/c/JasonAchilles', type: 'external' },
 ];
 
 const photoFiles = [
@@ -168,18 +118,37 @@ export function Discography() {
   return (
     <div className="flex flex-col gap-6 pb-8">
       <div className="flex flex-wrap justify-between items-center gap-3 border-b border-amber-dim pb-2">
-        <h2 className="font-share text-2xl md:text-3xl uppercase tracking-[0.22em] bg-gradient-to-r from-[#26f6fd] via-[#7cfaff] to-[#f3feff] bg-clip-text text-transparent">
-          Mars Acoustic Research
-        </h2>
+        <div>
+          <h2 className="font-share text-2xl md:text-3xl uppercase tracking-[0.22em] bg-gradient-to-r from-[#26f6fd] via-[#7cfaff] to-[#f3feff] bg-clip-text text-transparent">
+            Nerd Sh!t
+          </h2>
+          <p className="font-vt323 text-sm md:text-base text-[#8feaf0] tracking-wider mt-0.5">
+            Mars Acoustic Research · ISS Tracker · NASA Archive
+          </p>
+        </div>
         <div className="flex items-center gap-3">
-          <span className="font-vt323 text-amber-bright text-base md:text-lg">MISSION CRITICAL // AUDIO + PRESS DOSSIER</span>
           <Link
-            to="/logistics"
+            to="/research"
             className="border border-amber-dim px-2 py-1 font-vt323 text-xs text-amber hover:border-amber hover:bg-amber hover:text-black transition-colors"
           >
-            NEXT SHOW ROUTE
+            PRESS ARCHIVE
           </Link>
         </div>
+      </div>
+
+      <div className="rounded p-[1px] bg-gradient-to-r from-[#00595f] via-[#26f6fd] to-[#00828c] shadow-[0_0_22px_rgba(38,246,253,0.24)]">
+        <section className="border border-[#26f6fd]/45 bg-[#020a0b] rounded-[7px] p-4 md:p-5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-[#26f6fd]/25 pb-2">
+            <h3 className="font-share text-lg md:text-xl tracking-wider uppercase text-[#c8feff]">
+              Credentials // Verified
+            </h3>
+            <span className="font-vt323 text-sm text-[#8feaf0] uppercase tracking-wider">NASA/JPL · EDLCAM</span>
+          </div>
+          <p className="mt-3 font-vt323 text-lg md:text-xl text-[#d8feff] leading-relaxed">
+            Designed the microphone on the Mars Perseverance rover. Same ears, different planet. Now making loud rock
+            on Earth.
+          </p>
+        </section>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -195,32 +164,21 @@ export function Discography() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-4">
-        <section className="border border-amber-dim/60 bg-black/70 p-4 md:p-5">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-amber-dim/40 pb-2">
-            <h3 className="font-share text-amber-bright uppercase tracking-wider">Mission Brief</h3>
-            <span className="font-vt323 text-amber-dim text-xs md:text-sm tracking-[0.2em] uppercase">
-              STATUS: ONLINE
-            </span>
+        <section className="border border-cyan-dim/50 bg-black/70 p-4 md:p-5 rounded relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-dim to-transparent"></div>
+          <div className="flex items-center gap-2 mb-3">
+            <Info className="w-4 h-4 text-cyan" />
+            <h3 className="font-share text-cyan tracking-widest uppercase">Engineering Dossier</h3>
           </div>
-          <p className="mt-3 font-vt323 text-amber text-lg md:text-xl leading-relaxed">
-            The same engineering discipline used on the Mars microphone now drives the stage experiment. This is not
-            costume sci-fi branding, it is real audio research translated into live heavy rock.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Link
-              to="/logistics"
-              className="border border-amber px-3 py-1.5 font-share text-sm tracking-wider text-amber-bright hover:bg-amber hover:text-black transition-colors"
-            >
-              OPEN LAUNCH VECTOR
-            </Link>
-            <a
-              href="https://www.youtube.com/c/JasonAchilles"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-amber-dim px-3 py-1.5 font-share text-sm tracking-wider text-amber hover:border-amber hover:bg-amber/10 transition-colors"
-            >
-              YOUTUBE FEED
-            </a>
+          <div className="font-vt323 text-[#e7dfd1] space-y-2 text-base md:text-lg">
+            {credentialsProfile.map((item) => (
+              <p key={item.label}>
+                <span className="text-cyan-dim">{item.label}:</span> {item.value}
+              </p>
+            ))}
+            <div className="mt-4 p-2 border border-cyan-dim/30 bg-cyan-dim/10 text-cyan-bright text-sm leading-relaxed">
+              &gt; NOTE: Real audio research — not costume sci-fi branding.
+            </div>
           </div>
         </section>
 
@@ -257,17 +215,18 @@ export function Discography() {
               );
             })}
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {signalIndicators.map((signal) => (
-              <span
-                key={`quick-${signal.label}`}
-                className="inline-flex items-center gap-2 border border-[#26f6fd]/20 bg-[#041014]/80 px-2 py-1 font-vt323 text-xs tracking-widest text-[#c8feff] uppercase"
-              >
-                <span className={`h-2 w-2 rounded-full ${signal.color} animate-pulse`}></span>
-                {signal.label}
-              </span>
-            ))}
+        </section>
+      </div>
+
+      <div className="rounded p-[1px] bg-gradient-to-r from-[#00595f] via-[#26f6fd] to-[#00828c] shadow-[0_0_22px_rgba(38,246,253,0.24)]">
+        <section id="iss-tracker" className="border border-[#26f6fd]/45 bg-[#020a0b] rounded-[7px] p-4 md:p-5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-[#26f6fd]/25 pb-2 mb-4">
+            <h3 className="font-share text-xl md:text-2xl tracking-wider uppercase text-[#c8feff]">ISS Tracker</h3>
+            <span className="font-vt323 text-sm md:text-base uppercase tracking-wider text-[#8feaf0]">
+              Live Orbital Feed
+            </span>
           </div>
+          <IssTrackerPanel compact />
         </section>
       </div>
 
@@ -283,8 +242,8 @@ export function Discography() {
           </div>
 
           <p className="mt-3 font-vt323 text-lg md:text-xl text-[#d8feff] leading-snug">
-            These two files are a major part of the Jason Achilles story: authentic Martian atmosphere recordings
-            captured by the Perseverance rover microphone system and post-processed for public listening clarity.
+            Authentic Martian atmosphere recordings captured by the Perseverance rover microphone system and
+            post-processed for public listening clarity.
           </p>
 
           <div className="mt-4 grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -295,9 +254,7 @@ export function Discography() {
                     <h4 className="font-share text-base md:text-lg tracking-wide uppercase text-[#ccfeff] leading-tight">
                       {recording.title}
                     </h4>
-                    <p className="font-vt323 text-base md:text-lg text-[#bffcff] mt-0.5">
-                      {recording.subtitle}
-                    </p>
+                    <p className="font-vt323 text-base md:text-lg text-[#bffcff] mt-0.5">{recording.subtitle}</p>
                   </div>
                   <span className="inline-block border border-[#26f6fd]/45 px-2 py-0.5 font-vt323 text-xs text-[#bffcff] uppercase tracking-wider">
                     NASA/JPL Source
@@ -321,15 +278,6 @@ export function Discography() {
                   </p>
                   <p>
                     <span className="text-[#d8feff]">Post-processing:</span> {recording.credits}
-                  </p>
-                  <p>
-                    <span className="text-[#d8feff]">System Integration:</span> {recording.integration}
-                  </p>
-                  <p>
-                    <span className="text-[#d8feff]">NASA Reference Path:</span> {recording.sourcePath}
-                  </p>
-                  <p>
-                    <span className="text-[#d8feff]">License:</span> {recording.license}
                   </p>
                 </div>
 
@@ -356,95 +304,38 @@ export function Discography() {
         </section>
       </div>
 
-      <div id="research-logs" className="border border-red-dim/60 bg-black/80 p-4 md:p-5">
+      <div className="border border-red-dim/60 bg-black/80 p-4 md:p-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-red-dim/40 pb-2">
-          <h3 className="font-share text-red-bright uppercase tracking-wider">Mission Critical // Research Logs</h3>
-          <span className="font-vt323 text-red-dim text-sm md:text-base">CLASSIFIED_ACCESS_GRANTED</span>
+          <h3 className="font-share text-red-bright uppercase tracking-wider">Press Archive</h3>
+          <span className="font-vt323 text-red-dim text-sm md:text-base">WIRED · KTLA · CBC · TMJ4</span>
         </div>
         <p className="font-vt323 text-[#ffd6e2] mt-3 text-lg md:text-xl leading-relaxed">
-          Documented sources covering the Mars microphone work and public research trail tied to the Jason Achilles story.
+          Press coverage lives on its own page — outlet names up front, headlines below.
         </p>
-        <div className="mt-4 grid grid-cols-1 gap-3">
-          {researchLogs.map((log, index) => (
-            <motion.a
-              key={log.id}
-              href={log.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.08 }}
-              className="group relative border border-red-dim/55 bg-black/90 p-3 md:p-4 hover:border-red hover:bg-red/8 transition-all duration-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-3"
-            >
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-vt323 text-red-dim bg-red-dim/20 px-1">{log.id}</span>
-                  <span className="font-share text-xs text-red-bright">{log.source} // {log.date}</span>
-                </div>
-                <h4 className="font-share text-lg md:text-xl text-[#ffd6e2] group-hover:text-red-bright transition-colors">
-                  {log.title}
-                </h4>
-              </div>
-
-              <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-                <span className="font-vt323 text-red-dim">[{log.status}]</span>
-                <ExternalLink className="w-5 h-5 text-red-dim group-hover:text-red transition-colors" />
-              </div>
-            </motion.a>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <div className="border border-cyan-dim/50 bg-black/70 p-4 rounded relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-dim to-transparent"></div>
-          <div className="flex items-center gap-2 mb-3">
-            <Info className="w-4 h-4 text-cyan" />
-            <h3 className="font-share text-cyan tracking-widest uppercase">Subject Profile</h3>
-          </div>
-          <div className="font-vt323 text-[#e7dfd1] space-y-2 text-base md:text-lg">
-            {subjectProfile.map((item) => (
-              <p key={item.label}>
-                <span className="text-cyan-dim">{item.label}:</span> {item.value}
-              </p>
-            ))}
-            <div className="mt-4 p-2 border border-cyan-dim/30 bg-cyan-dim/10 text-cyan-bright text-sm leading-relaxed">
-              &gt; WARNING: Subject exhibits high levels of analog friction. Performances are tactile, loud, and intentionally unsequenced.
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-green-dim/50 bg-black/70 p-4 rounded relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-dim to-transparent"></div>
-          <div className="flex items-center gap-2 mb-3">
-            <Activity className="w-4 h-4 text-green" />
-            <h3 className="font-share text-green tracking-widest uppercase">Current Objective</h3>
-          </div>
-          <div className="font-vt323 text-[#e7dfd1] space-y-2 text-base md:text-lg">
-            {currentObjective.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-            <div className="mt-4 p-2 border border-green-dim/30 bg-green-dim/10 text-green-bright text-sm leading-relaxed">
-              &gt; STATUS: Operational. Next deployment vector is loaded. Open Launch Vector for show coordinates.
-            </div>
-          </div>
-        </div>
+        <Link
+          to="/research"
+          className="inline-block mt-4 border border-red px-3 py-2 font-share text-sm tracking-wider text-red-bright hover:bg-red hover:text-black transition-colors"
+        >
+          OPEN PRESS ARCHIVE
+        </Link>
       </div>
 
       <div className="rounded p-[1px] bg-gradient-to-r from-[#4f2ea3] via-[#8f66ff] to-[#d8c2ff] shadow-[0_0_20px_rgba(143,102,255,0.34)]">
         <section className="border border-[#a97bff]/45 bg-[#07050f] rounded-[7px] p-4 md:p-5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-[#a97bff]/25 pb-2">
             <h3 className="font-share text-xl md:text-2xl tracking-wider uppercase text-[#f3ebff]">
-              Mission Visual + Launch Archive
+              Mission Visual Archive
             </h3>
             <span className="font-vt323 text-sm md:text-base uppercase tracking-wider text-[#eadbff]">
-              External Transmissions + Field Photos
+              Field Photos + Transmissions
             </span>
           </div>
 
           <div className="mt-4 grid grid-cols-1 xl:grid-cols-[340px_1fr] gap-5">
             <div className="border border-[#a97bff]/35 bg-black/70 rounded p-3 md:p-4">
-              <div className="font-share text-lg md:text-xl text-[#f3ebff] uppercase tracking-wider">Launch Video Links</div>
+              <div className="font-share text-lg md:text-xl text-[#f3ebff] uppercase tracking-wider">
+                Launch Video Links
+              </div>
               <div className="mt-3 flex flex-col gap-2">
                 {launchTransmissions.map((video) => (
                   <a
@@ -462,7 +353,9 @@ export function Discography() {
             </div>
 
             <div className="border border-[#a97bff]/35 bg-black/70 rounded p-3 md:p-4">
-              <div className="font-share text-lg md:text-xl text-[#f3ebff] uppercase tracking-wider">Jason Photo Archive</div>
+              <div className="font-share text-lg md:text-xl text-[#f3ebff] uppercase tracking-wider">
+                Jason Photo Archive
+              </div>
               <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 auto-rows-[110px] md:auto-rows-[88px]">
                 {photoFiles.map((photo, index) => {
                   const photoUrl = toPublicAsset(`jason-photos/${photo}`);
@@ -474,7 +367,11 @@ export function Discography() {
                       rel="noopener noreferrer"
                       className={`group relative overflow-hidden border border-[#a97bff]/35 bg-black/70 hover:border-[#e1d3ff] transition-colors ${getPhotoTileClass(index)}`}
                     >
-                      <img src={photoUrl} alt={formatPhotoLabel(photo)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <img
+                        src={photoUrl}
+                        alt={formatPhotoLabel(photo)}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
                       <div className="absolute inset-x-0 bottom-0 px-2 py-1 bg-black/65 font-vt323 text-xs text-[#c9adff] truncate group-hover:text-[#eadbff]">
                         {formatPhotoLabel(photo).toUpperCase()}
                       </div>

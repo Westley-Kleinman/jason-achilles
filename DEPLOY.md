@@ -55,3 +55,17 @@ If SiteGround shows `ftp.jasonachilles.com` but GitHub says `ENOTFOUND`:
 ## After deploy succeeds
 
 The live site is at [https://jasonachilles.com](https://jasonachilles.com). Future updates: commit and push to `main`.
+
+The deploy workflow verifies that `/` returns the React build (`Live Terminal` title) and that the linked CSS/JS assets respond with HTTP 200.
+
+### If the site looks unstyled (especially on mobile)
+
+This usually means the domain root is still serving **WordPress** (`index.php`) instead of the Vite `index.html`. WordPress may render HTML while theme CSS under `/wp-content/` returns 404.
+
+1. Push the latest `main` (includes `public/.htaccess` with `DirectoryIndex index.html index.php`) and run **Deploy to SiteGround**.
+2. In SiteGround **Site Tools → WordPress → Install & Manage**, deactivate or uninstall WordPress for `jasonachilles.com`, **or** rename `public_html/index.php` to `index.php.bak` via FTP/File Manager so Apache serves `index.html`.
+3. Confirm `public_html/.htaccess` contains the SPA rules from `public/.htaccess` in this repo.
+4. Hard-refresh on your phone (or open a private tab) and check:
+   - Page title is **Jason Achilles // Live Terminal** (not the old WordPress title).
+   - Terminal styling, fonts, and nav colors load.
+   - DevTools → Network shows `/assets/index-*.css` and `/assets/index-*.js` with status 200.

@@ -46,4 +46,17 @@ jobs:
           protocol: ftp
           local-dir: ./dist/
           server-dir: public_html/
+          state-name: ../.ftp-deploy-sync-state.json
           log-level: verbose
+
+      - name: Verify live homepage serves React build
+        run: |
+          set -euo pipefail
+          HTML="$(curl -fsSL -A 'jason-achilles-deploy-check' https://jasonachilles.com/)"
+          echo "$HTML" | grep -q 'Live Terminal'
+          CSS_PATH="$(echo "$HTML" | grep -oE '/assets/index-[^"]+\.css' | head -n1)"
+          test -n "$CSS_PATH"
+          curl -fsSI -A 'jason-achilles-deploy-check' "https://jasonachilles.com${CSS_PATH}" >/dev/null
+          JS_PATH="$(echo "$HTML" | grep -oE '/assets/index-[^"]+\.js' | head -n1)"
+          test -n "$JS_PATH"
+          curl -fsSI -A 'jason-achilles-deploy-check' "https://jasonachilles.com${JS_PATH}" >/dev/null

@@ -1,6 +1,12 @@
+# Prefer the Vite build over legacy WordPress index.php at the domain root.
+DirectoryIndex index.html index.php
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Serve the React SPA at / instead of WordPress.
+  RewriteRule ^$ index.html [L]
 
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f

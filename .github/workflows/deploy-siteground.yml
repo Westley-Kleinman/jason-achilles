@@ -39,10 +39,11 @@ jobs:
       - name: Deploy to SiteGround
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.SITEGROUND_FTP_HOST }}
+          server: ftp.jasonachilles.com
           username: ${{ secrets.SITEGROUND_FTP_USER }}
           password: ${{ secrets.SITEGROUND_FTP_PASSWORD }}
           port: 21
           protocol: ftp
           local-dir: ./dist/
-          server-dir: ${{ secrets.SITEGROUND_FTP_PATH }}
+          server-dir: public_html/
+          log-level: verbose

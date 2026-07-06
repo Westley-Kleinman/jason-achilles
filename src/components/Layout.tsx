@@ -181,7 +181,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const nextShowText = showItems.map((show) => show.text).join('   //   ');
 
   return (
-    <div className="relative w-full min-h-screen md:h-dvh bg-black overflow-x-hidden overflow-y-auto md:overflow-hidden max-w-[100vw]">
+    <div className="relative w-full min-h-screen md:h-dvh bg-black overflow-x-hidden overflow-y-auto md:overflow-hidden">
       <div className="crt-overlay pointer-events-none"></div>
 
       <div

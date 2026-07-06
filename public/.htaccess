@@ -2,6 +2,18 @@
 # (deploy workflow does this automatically; see DEPLOY.md for manual steps).
 DirectoryIndex index.html
 
+# Prevent stale WordPress HTML from being cached for months on mobile browsers/CDN.
+<IfModule mod_headers.c>
+  <FilesMatch "^(index\.html|index\.php)$">
+    Header always set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header always set Pragma "no-cache"
+    Header always set Expires "0"
+  </FilesMatch>
+  <FilesMatch "\.(css|js|woff2?|svg|png|jpg|jpeg|webp|ico|pdf)$">
+    Header always set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /

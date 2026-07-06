@@ -60,7 +60,17 @@ The deploy workflow verifies that `/` returns the React build (`Live Terminal` t
 
 ### If the site looks unstyled (especially on mobile)
 
-This usually means the domain root is still serving **WordPress** (`index.php`) instead of the Vite `index.html`. SiteGround’s nginx layer prefers `index.php` before Apache applies `.htaccess`, so **renaming `index.php` is required** — `.htaccess` alone is not enough.
+**Most common cause:** your phone is showing a **cached copy of the old WordPress page**. SiteGround was sending `index.html` with a **180-day cache** (`max-age=15552000`). That HTML pointed at WordPress CSS under `/wp-content/` (now 404), so the page looks unstyled.
+
+**Fix on your phone right now:**
+
+1. SiteGround → **Site Tools** → **Speed** → **Caching** → **Flush Cache** (Dynamic / NGINX).
+2. On the phone: open a **private/incognito** tab, or clear Safari/Chrome cache for `jasonachilles.com`.
+3. Confirm the tab title is **Jason Achilles // Live Terminal** (not the old WordPress title).
+
+After the latest deploy, `.htaccess` sets `no-cache` on `index.html` so this should not recur.
+
+**If it still happens after a cache flush**, the domain root may still be serving **WordPress** (`index.php`) instead of the Vite `index.html`. SiteGround’s nginx layer prefers `index.php` before Apache applies `.htaccess`, so **renaming `index.php` is required** — `.htaccess` alone is not enough.
 
 The deploy workflow renames `public_html/index.php` → `index.php.wordpress-bak` automatically after each FTP upload. If `/` still shows the old WordPress page:
 

@@ -9,7 +9,21 @@ export default defineConfig(({mode}) => {
 
   return {
     base: basePath,
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'strip-crossorigin-from-build',
+        apply: 'build',
+        transformIndexHtml(html) {
+          return html.replace(/\s+crossorigin/g, '');
+        },
+      },
+    ],
+    build: {
+      // Same-origin assets do not need CORS; crossorigin can break CSS on some mobile browsers.
+      crossOriginAttribute: false,
+    },
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },

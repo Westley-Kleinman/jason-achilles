@@ -84,11 +84,18 @@ jobs:
         run: |
           set -euo pipefail
           sleep 5
-          HTML="$(curl -fsSL -A 'jason-achilles-deploy-check' -H 'Cache-Control: no-cache' "https://jasonachilles.com/?_=$(date +%s)")"
+          MOBILE_UA='Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+          HTML="$(curl -fsSL -A "$MOBILE_UA" -H 'Cache-Control: no-cache' "https://jasonachilles.com/?_=$(date +%s)")"
           echo "$HTML" | grep -q 'Live Terminal'
+          echo "$HTML" | grep -vq 'wp-content'
           CSS_PATH="$(echo "$HTML" | grep -oE '/assets/index-[^"]+\.css' | head -n1)"
           test -n "$CSS_PATH"
-          curl -fsSI -A 'jason-achilles-deploy-check' "https://jasonachilles.com${CSS_PATH}" >/dev/null
+          curl -fsSI -A "$MOBILE_UA" "https://jasonachilles.com${CSS_PATH}" >/dev/null
           JS_PATH="$(echo "$HTML" | grep -oE '/assets/index-[^"]+\.js' | head -n1)"
           test -n "$JS_PATH"
-          curl -fsSI -A 'jason-achilles-deploy-check' "https://jasonachilles.com${JS_PATH}" >/dev/null
+          curl -fsSI -A "$MOBILE_UA" "https://jasonachilles.com${JS_PATH}" >/dev/null
+          CACHE_HEADER="$(curl -fsSI -A "$MOBILE_UA" "https://jasonachilles.com/index.html" | tr -d '\r' | grep -i '^cache-control:' || true)"
+          echo "index.html Cache-Control: ${CACHE_HEADER:-none}"
+          if echo "$CACHE_HEADER" | grep -qi 'max-age=15552000'; then
+            echo 'WARNING: index.html still has a 180-day cache header — flush SiteGround cache (Speed → Caching).'
+          fi

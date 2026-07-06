@@ -29,10 +29,20 @@ SiteGround may show something like `ftp.jasonachilles.com` or a server name such
 
 GitHub Actions resolves DNS on the public internet. If your secret hostname does not resolve publicly, the deploy will fail even if FTP works on your home network.
 
-- **`ftp.jasonachilles.com` does not resolve in public DNS today** (only `jasonachilles.com` resolves). If SiteGround shows `ftp.jasonachilles.com`, either add a public DNS record for that name in SiteGround **Site Tools → DNS Zone Editor** (or your DNS provider), **or** use the **server hostname** SiteGround gives you (often on the FTP Accounts page or **Dashboard** / account info), e.g. `giowXXXX.siteground.us`.
-- After updating the secret, re-run the failed workflow: **Actions** → failed run → **Re-run all jobs**.
+### Quick fix: add `ftp` DNS record in SiteGround
 
-Contact SiteGround support if you cannot find a hostname that works from outside your network.
+If SiteGround shows `ftp.jasonachilles.com` but GitHub says `ENOTFOUND`:
+
+1. **Site Tools** → **Domain** → **DNS Zone Editor** (for `jasonachilles.com`).
+2. **Add new record** → type **A**.
+3. **Name:** `ftp` (SiteGround may show this as `ftp.jasonachilles.com`).
+4. **Points to / Value:** same IP as your main `@` A record (currently `35.212.2.98` for `jasonachilles.com`).
+5. Save. DNS can take 5–30 minutes to propagate.
+6. Set GitHub secret `SITEGROUND_FTP_HOST` to `ftp.jasonachilles.com`.
+7. **Actions** → **Re-run all jobs**.
+
+**Alternate:** If SiteGround lists a server hostname like `giow1234.siteground.us` on the FTP page, use that as `SITEGROUND_FTP_HOST` instead—no DNS change needed if it already resolves.
+
 
 ## Troubleshooting a failed deploy
 

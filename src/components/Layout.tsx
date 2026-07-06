@@ -181,26 +181,26 @@ export function Layout({ children }: { children: ReactNode }) {
   const nextShowText = showItems.map((show) => show.text).join('   //   ');
 
   return (
-    <div className="relative w-full min-h-screen md:h-dvh bg-black overflow-x-hidden overflow-y-auto md:overflow-hidden">
+    <div className="relative w-full min-h-screen md:h-dvh bg-black overflow-x-hidden overflow-y-auto md:overflow-hidden max-w-[100vw]">
       <div className="crt-overlay pointer-events-none"></div>
 
       <div
-        className={`relative w-full min-h-screen md:h-full bg-[linear-gradient(180deg,#171a1f_0%,#111318_100%)] p-4 md:p-6 flex flex-col gap-4 md:gap-6 pb-24 md:pb-6 ${booting ? 'fishbowl' : 'crt-flicker box-glow-amber'}`}
+        className={`relative w-full min-h-screen md:h-full bg-[linear-gradient(180deg,#171a1f_0%,#111318_100%)] p-3 sm:p-4 md:p-6 flex flex-col gap-3 md:gap-6 pb-[calc(5.75rem+env(safe-area-inset-bottom,0px))] md:pb-6 ${booting ? 'fishbowl' : 'crt-flicker box-glow-amber'}`}
       >
         <header className="border-b-2 border-amber-dim pb-3 shrink-0">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(340px,1fr)_auto_minmax(340px,1fr)] items-center gap-3 md:gap-4">
-            <div className="order-2 xl:order-1 min-w-0 xl:justify-self-start xl:pr-12">
-              <p className="font-share text-amber-bright text-lg md:text-xl tracking-[0.08em] leading-tight">
+            <div className="order-2 xl:order-1 min-w-0 w-full xl:justify-self-start xl:pr-12">
+              <p className="font-share text-amber-bright text-base sm:text-lg md:text-xl tracking-[0.06em] sm:tracking-[0.08em] leading-tight">
                 Jason Achilles // Live Terminal
               </p>
-              <p className="mt-0.5 font-vt323 text-base md:text-lg text-amber-dim leading-tight tracking-wide">
+              <p className="mt-0.5 font-vt323 text-sm sm:text-base md:text-lg text-amber-dim leading-tight tracking-wide">
                 EXPERIMENTAL HEAVY ROCK // BROADCAST IN REAL TIME
               </p>
-              <div className="mt-1.5 flex flex-wrap items-center gap-2 md:gap-3 font-vt323 text-lg md:text-xl leading-tight">
-                <span className="text-amber-dim text-sm md:text-base tracking-[0.14em] uppercase">
+              <div className="mt-1.5 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1 sm:gap-2 md:gap-3 font-vt323 text-base sm:text-lg md:text-xl leading-tight">
+                <span className="text-amber-dim text-sm md:text-base tracking-[0.14em] uppercase shrink-0">
                   Next Show:
                 </span>
-                <div className="relative flex-1 min-w-[220px] max-w-full xl:max-w-[360px] overflow-hidden">
+                <div className="relative w-full min-w-0 max-w-full xl:max-w-[360px] overflow-hidden">
                   <div className="marquee-track">
                     <span className="text-[#95ff7a] drop-shadow-[0_0_8px_rgba(149,255,122,0.55)]">
                       {nextShowText}
@@ -216,10 +216,10 @@ export function Layout({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            <div className="order-1 xl:order-2 flex items-center justify-center xl:justify-self-center">
+            <div className="order-1 xl:order-2 flex items-center justify-center xl:justify-self-center w-full min-w-0">
               <Link
                 to="/"
-                className="flex items-center justify-center w-60 h-24 sm:w-72 sm:h-24 md:w-[430px] md:h-28 px-1 shrink-0"
+                className="flex items-center justify-center w-full max-w-[280px] sm:max-w-[320px] h-20 sm:h-24 md:max-w-[430px] md:h-28 px-1 shrink-0"
               >
                 {showLogoFallback ? (
                   <div className="flex flex-col items-center justify-center w-full h-full">
@@ -281,12 +281,12 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <div className="flex-1 flex flex-col md:flex-row gap-5 md:gap-6 md:min-h-0">
-          <aside className="w-full md:w-80 xl:w-[23rem] shrink-0 flex flex-col gap-4 overflow-visible md:overflow-y-auto custom-scrollbar">
+        <div className="flex-1 flex flex-col md:flex-row gap-3 md:gap-6 md:min-h-0 min-w-0">
+          <aside className="w-full md:w-80 xl:w-[23rem] shrink-0 flex flex-col gap-2 md:gap-4 overflow-visible md:overflow-y-auto custom-scrollbar min-w-0">
             <Navigation />
           </aside>
 
-          <main className="flex-1 bg-[linear-gradient(180deg,#000_0%,#05070a_100%)] border-2 border-amber-dim rounded-xl p-5 md:p-6 overflow-visible md:overflow-hidden relative box-glow-amber flex flex-col">
+          <main className="flex-1 min-w-0 bg-[linear-gradient(180deg,#000_0%,#05070a_100%)] border-2 border-amber-dim rounded-xl p-3 sm:p-4 md:p-6 overflow-visible md:overflow-hidden relative box-glow-amber flex flex-col">
             {booting ? (
               <div className="w-full h-full flex items-center justify-center">
                 <motion.div
@@ -307,7 +307,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
 
         <footer className="shrink-0 border-t-2 border-amber-dim pt-3 flex flex-col gap-2 font-share text-xs md:text-sm text-amber-dim">
-          <div className="flex flex-wrap gap-x-4 gap-y-1">
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
             <a href="mailto:jmezilis@gmail.com" className="hover:text-amber transition-colors">
               CONTACT
             </a>
@@ -321,15 +321,15 @@ export function Layout({ children }: { children: ReactNode }) {
               SHOWS
             </Link>
           </div>
-          <div className="flex flex-wrap gap-2 justify-between">
-            <span>SYS.OP: F. MITCHELL</span>
-            <span>LAT: 34.0522 N // LON: 118.2437 W</span>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1 sm:gap-2 sm:justify-between">
+            <span className="truncate">SYS.OP: F. MITCHELL</span>
+            <span className="truncate">LAT: 34.0522 N // LON: 118.2437 W</span>
           </div>
         </footer>
       </div>
 
       {!booting && nextShow ? (
-        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t-2 border-[#84ff6a]/60 bg-[#0b0f0a]/95 backdrop-blur-sm px-4 py-3">
+        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t-2 border-[#84ff6a]/60 bg-[#0b0f0a]/95 backdrop-blur-sm px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="font-vt323 text-xs text-[#84ff6a] uppercase tracking-wider">Next Show</p>

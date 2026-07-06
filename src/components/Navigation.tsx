@@ -75,10 +75,11 @@ export function Navigation() {
   };
 
   return (
-    <nav className="flex flex-col gap-4">
-      <div className="font-share text-lg border-b border-amber-dim/50 pb-1 mb-2 bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8] bg-clip-text text-transparent">
+    <nav className="flex flex-col gap-2 md:gap-4 min-w-0">
+      <div className="font-share text-base md:text-lg border-b border-amber-dim/50 pb-1 mb-1 md:mb-2 bg-gradient-to-r from-[#ff7a1a] via-[#ffb067] to-[#ffd3a8] bg-clip-text text-transparent">
         SELECT MODULE
       </div>
+      <div className="flex md:flex-col gap-2 md:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-1 md:pb-0 -mx-0.5 px-0.5 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {navItems.map((item) => {
         const colors = colorMap[item.color];
         const wrapLabel = wrapLabelPaths.has(item.path);
@@ -88,26 +89,26 @@ export function Navigation() {
             to={item.path}
             onClick={playClick}
             className={({ isActive }) =>
-              `relative group flex items-center gap-3.5 p-4 md:p-[1.15rem] border-2 transition-colors duration-75 ${
+              `relative group flex items-center gap-2.5 md:gap-3.5 p-3 md:p-[1.15rem] border-2 transition-colors duration-75 shrink-0 w-[min(72vw,260px)] md:w-auto md:shrink snap-start ${
                 isActive ? colors.active : colors.inactive
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <item.icon className={`w-6 h-6 shrink-0 ${isActive ? 'animate-pulse' : ''}`} />
-                <div className="flex flex-col overflow-hidden">
+                <item.icon className={`w-5 h-5 md:w-6 md:h-6 shrink-0 ${isActive ? 'animate-pulse' : ''}`} />
+                <div className="flex flex-col overflow-hidden min-w-0">
                   <span
                     className={`font-share uppercase tracking-wider ${
                       wrapLabel
-                        ? 'text-base md:text-xl leading-tight whitespace-normal break-words'
-                        : 'text-xl md:text-2xl leading-none truncate'
+                        ? 'text-sm md:text-xl leading-tight whitespace-normal break-words'
+                        : 'text-base md:text-2xl leading-tight md:leading-none truncate'
                     }`}
                   >
                     {item.label}
                   </span>
                   <span
-                    className={`font-vt323 text-sm md:text-base uppercase mt-1 ${
+                    className={`font-vt323 text-xs md:text-base uppercase mt-0.5 md:mt-1 ${
                       wrapLabel ? 'whitespace-normal break-words leading-snug' : 'truncate'
                     } ${isActive ? '' : 'opacity-70'}`}
                   >
@@ -127,6 +128,7 @@ export function Navigation() {
           </NavLink>
         );
       })}
+      </div>
     </nav>
   );
 }

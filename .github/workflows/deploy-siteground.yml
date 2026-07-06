@@ -49,8 +49,7 @@ jobs:
           state-name: ../.ftp-deploy-sync-state.json
           log-level: verbose
 
-      # SiteGround nginx prefers index.php before Apache reads DirectoryIndex.
-      # Renaming the legacy WordPress bootstrap is the reliable fix on shared hosting.
+      # Belt-and-suspenders: try renaming any legacy WordPress index.php backup.
       - name: Disable WordPress index.php at domain root
         env:
           FTP_HOST: ${{ secrets.SITEGROUND_FTP_HOST }}
@@ -60,26 +59,23 @@ jobs:
           python3 <<'PY'
           import ftplib
           import os
-          import sys
 
-          host = os.environ["FTP_HOST"]
-          user = os.environ["FTP_USER"]
-          password = os.environ["FTP_PASS"]
-          src = "index.php"
-          dst = "index.php.wordpress-bak"
+          ftp = ftplib.FTP(os.environ["FTP_HOST"], timeout=60)
+          ftp.login(os.environ["FTP_USER"], os.environ["FTP_PASS"])
+          for path in ("public_html", "."):
+              try:
+                  ftp.cwd(path)
+                  break
+              except ftplib.error_perm:
+                  continue
 
-          ftp = ftplib.FTP(host, timeout=60)
-          ftp.login(user, password)
-          ftp.cwd("public_html")
-
-          names = ftp.nlst()
-          if dst in names:
-              print(f"{dst} already exists; leaving WordPress disabled.")
-          elif src not in names:
-              print(f"{src} not found; nothing to rename.")
+          names = set(ftp.nlst())
+          if "index.php.wordpress-bak" in names:
+              print("WordPress index.php already renamed to backup")
+          elif "index.php" in names:
+              print("index.php present (deploy should have overwritten with redirect stub)")
           else:
-              ftp.rename(src, dst)
-              print(f"Renamed {src} -> {dst}")
+              print("index.php not listed via FTP")
 
           ftp.quit()
           PY
@@ -87,7 +83,8 @@ jobs:
       - name: Verify live homepage serves React build
         run: |
           set -euo pipefail
-          HTML="$(curl -fsSL -A 'jason-achilles-deploy-check' https://jasonachilles.com/)"
+          sleep 5
+          HTML="$(curl -fsSL -A 'jason-achilles-deploy-check' -H 'Cache-Control: no-cache' "https://jasonachilles.com/?_=$(date +%s)")"
           echo "$HTML" | grep -q 'Live Terminal'
           CSS_PATH="$(echo "$HTML" | grep -oE '/assets/index-[^"]+\.css' | head -n1)"
           test -n "$CSS_PATH"

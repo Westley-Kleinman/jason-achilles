@@ -64,7 +64,7 @@ This usually means the domain root is still serving **WordPress** (`index.php`) 
 
 The deploy workflow renames `public_html/index.php` → `index.php.wordpress-bak` automatically after each FTP upload. If `/` still shows the old WordPress page:
 
-1. Push the latest `main` and run **Deploy to SiteGround** (or **Re-run all jobs** on the latest failed run).
+1. Push the latest `main` and run **Deploy to SiteGround** (or **Re-run all jobs** on the latest failed run). Each deploy uploads `public/index.php`, a tiny redirect stub that replaces the WordPress bootstrap so `/` → `/index.html`.
 2. If the rename step fails, do it manually (steps below).
 3. Hard-refresh on your phone (or open a private tab) and check:
    - Page title is **Jason Achilles // Live Terminal** (not the old WordPress title).

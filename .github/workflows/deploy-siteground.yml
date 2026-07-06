@@ -57,16 +57,32 @@ jobs:
           FTP_USER: ${{ secrets.SITEGROUND_FTP_USER }}
           FTP_PASS: ${{ secrets.SITEGROUND_FTP_PASSWORD }}
         run: |
-          set -euo pipefail
-          sudo apt-get install -y lftp
-          lftp -u "$FTP_USER,$FTP_PASS" "$FTP_HOST" <<'EOF'
-          set ftp:ssl-allow no
-          set cmd:fail-exit no
-          cd public_html
-          mv -n index.php index.php.wordpress-bak
-          bye
-          EOF
-          echo "WordPress index.php renamed (or already absent)."
+          python3 <<'PY'
+          import ftplib
+          import os
+          import sys
+
+          host = os.environ["FTP_HOST"]
+          user = os.environ["FTP_USER"]
+          password = os.environ["FTP_PASS"]
+          src = "index.php"
+          dst = "index.php.wordpress-bak"
+
+          ftp = ftplib.FTP(host, timeout=60)
+          ftp.login(user, password)
+          ftp.cwd("public_html")
+
+          names = ftp.nlst()
+          if dst in names:
+              print(f"{dst} already exists; leaving WordPress disabled.")
+          elif src not in names:
+              print(f"{src} not found; nothing to rename.")
+          else:
+              ftp.rename(src, dst)
+              print(f"Renamed {src} -> {dst}")
+
+          ftp.quit()
+          PY
 
       - name: Verify live homepage serves React build
         run: |

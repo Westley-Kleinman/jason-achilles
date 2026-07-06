@@ -60,12 +60,26 @@ The deploy workflow verifies that `/` returns the React build (`Live Terminal` t
 
 ### If the site looks unstyled (especially on mobile)
 
-This usually means the domain root is still serving **WordPress** (`index.php`) instead of the Vite `index.html`. WordPress may render HTML while theme CSS under `/wp-content/` returns 404.
+This usually means the domain root is still serving **WordPress** (`index.php`) instead of the Vite `index.html`. SiteGround’s nginx layer prefers `index.php` before Apache applies `.htaccess`, so **renaming `index.php` is required** — `.htaccess` alone is not enough.
 
-1. Push the latest `main` (includes `public/.htaccess` with `DirectoryIndex index.html index.php`) and run **Deploy to SiteGround**.
-2. In SiteGround **Site Tools → WordPress → Install & Manage**, deactivate or uninstall WordPress for `jasonachilles.com`, **or** rename `public_html/index.php` to `index.php.bak` via FTP/File Manager so Apache serves `index.html`.
-3. Confirm `public_html/.htaccess` contains the SPA rules from `public/.htaccess` in this repo.
-4. Hard-refresh on your phone (or open a private tab) and check:
+The deploy workflow renames `public_html/index.php` → `index.php.wordpress-bak` automatically after each FTP upload. If `/` still shows the old WordPress page:
+
+1. Push the latest `main` and run **Deploy to SiteGround** (or **Re-run all jobs** on the latest failed run).
+2. If the rename step fails, do it manually (steps below).
+3. Hard-refresh on your phone (or open a private tab) and check:
    - Page title is **Jason Achilles // Live Terminal** (not the old WordPress title).
    - Terminal styling, fonts, and nav colors load.
    - DevTools → Network shows `/assets/index-*.css` and `/assets/index-*.js` with status 200.
+
+#### Manual fix in SiteGround File Manager
+
+1. Log in to SiteGround → **Site Tools** for `jasonachilles.com`.
+2. Open **Site** → **File Manager**.
+3. Go to `public_html/`.
+4. Find `index.php` (WordPress bootstrap — **do not delete**; rename only).
+5. Right-click → **Rename** → `index.php.wordpress-bak`.
+6. Confirm `index.html` and `.htaccess` from the latest deploy are present in `public_html/`.
+7. Optional: **Speed** → **Caching** → **Flush Cache** (Dynamic/NGINX).
+8. Visit `https://jasonachilles.com/` in a private tab — you should see the React site.
+
+To restore WordPress later, rename `index.php.wordpress-bak` back to `index.php`.

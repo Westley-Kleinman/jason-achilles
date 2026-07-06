@@ -1,12 +1,13 @@
-# Prefer the Vite build over legacy WordPress index.php at the domain root.
-DirectoryIndex index.html index.php
+# Serve the Vite React SPA at /. WordPress index.php must be renamed on the server
+# (deploy workflow does this automatically; see DEPLOY.md for manual steps).
+DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # Serve the React SPA at / instead of WordPress.
-  RewriteRule ^$ index.html [L]
+  # Safety net if index.php is still present: never run WordPress for /.
+  RewriteRule ^index\.php$ /index.html [L,R=301]
 
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f

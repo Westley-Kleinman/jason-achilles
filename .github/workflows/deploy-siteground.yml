@@ -49,6 +49,25 @@ jobs:
           state-name: ../.ftp-deploy-sync-state.json
           log-level: verbose
 
+      # SiteGround nginx prefers index.php before Apache reads DirectoryIndex.
+      # Renaming the legacy WordPress bootstrap is the reliable fix on shared hosting.
+      - name: Disable WordPress index.php at domain root
+        env:
+          FTP_HOST: ${{ secrets.SITEGROUND_FTP_HOST }}
+          FTP_USER: ${{ secrets.SITEGROUND_FTP_USER }}
+          FTP_PASS: ${{ secrets.SITEGROUND_FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y lftp
+          lftp -u "$FTP_USER,$FTP_PASS" "$FTP_HOST" <<'EOF'
+          set ftp:ssl-allow no
+          set cmd:fail-exit no
+          cd public_html
+          mv -n index.php index.php.wordpress-bak
+          bye
+          EOF
+          echo "WordPress index.php renamed (or already absent)."
+
       - name: Verify live homepage serves React build
         run: |
           set -euo pipefail

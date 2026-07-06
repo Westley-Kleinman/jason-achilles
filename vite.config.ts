@@ -20,10 +20,6 @@ export default defineConfig(({mode}) => {
         },
       },
     ],
-    build: {
-      // Same-origin assets do not need CORS; crossorigin can break CSS on some mobile browsers.
-      crossOriginAttribute: false,
-    },
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },

@@ -72,10 +72,10 @@ After the latest deploy, `.htaccess` sets `no-cache` on `index.html` so this sho
 
 **If it still happens after a cache flush**, the domain root may still be serving **WordPress** (`index.php`) instead of the Vite `index.html`. SiteGround’s nginx layer prefers `index.php` before Apache applies `.htaccess`, so **renaming `index.php` is required** — `.htaccess` alone is not enough.
 
-The deploy workflow renames `public_html/index.php` → `index.php.wordpress-bak` automatically after each FTP upload. If `/` still shows the old WordPress page:
+Each deploy uploads `public/index.php`, a tiny redirect stub that **overwrites** the WordPress bootstrap so `/` → `/index.html`. If `/` still shows the old WordPress page:
 
-1. Push the latest `main` and run **Deploy to SiteGround** (or **Re-run all jobs** on the latest failed run). Each deploy uploads `public/index.php`, a tiny redirect stub that replaces the WordPress bootstrap so `/` → `/index.html`.
-2. If the rename step fails, do it manually (steps below).
+1. Push the latest `main` and run **Deploy to SiteGround** (or **Re-run all jobs** on the latest failed run).
+2. If the stub did not take effect, rename the WordPress file manually (steps below).
 3. Hard-refresh on your phone (or open a private tab) and check:
    - Page title is **Jason Achilles // Live Terminal** (not the old WordPress title).
    - Terminal styling, fonts, and nav colors load.
@@ -93,3 +93,11 @@ The deploy workflow renames `public_html/index.php` → `index.php.wordpress-bak
 8. Visit `https://jasonachilles.com/` in a private tab — you should see the React site.
 
 To restore WordPress later, rename `index.php.wordpress-bak` back to `index.php`.
+
+### If the site shows “Site Unavailable” (HTTP 429)
+
+SiteGround may temporarily rate-limit or suspend the site (429 with a “Site Unavailable” page). This is a **hosting** issue, not a React build problem.
+
+1. Log in to SiteGround → **Site Tools** → check for account warnings, resource limits, or security blocks.
+2. Open a support ticket if the 429 persists for more than a few minutes.
+3. After SiteGround restores service, **Speed** → **Caching** → **Flush Cache**, then verify `https://jasonachilles.com/` returns **Jason Achilles // Live Terminal**.
